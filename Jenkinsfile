@@ -46,8 +46,8 @@ node() {
         openshiftBuild bldCfg: 'topbeat-build', showBuildLogs: 'true', verbose: 'false', waitTime: '5', waitUnit: 'min'
     }
 }
-node('jenkins-slave-image-mgmt') {
-//node('imageMgmt') {
+//node('jenkins-slave-image-mgmt') {
+imageMgmtNode() {
     stage("Promote images") {
         withCredentials([string(credentialsId: 'SECRET_ARTIFACTORY_TOKEN', variable: 'ARTIFACTORY_API_KEY')]) {
             sh "promoteToArtifactory.sh -i sdbi/elasticsearch -t latest -r sdbi-docker-release-local -c"
