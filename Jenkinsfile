@@ -17,11 +17,6 @@ def dockerToken(String login = "serviceaccount") {
 } 
 
 def imageMgmtNode(Closure body) {
-    withCredentials([usernameColonPassword(credentialsId: 'artifactory', variable: 'SKOPEO_DEST_CREDENTIALS')]) {
-        withEnv(["SKOPEO_SRC_CREDENTIALS=${dockerToken()}"]) {
-            customNode(body, 'imageMgmt', 'artifactory.six-group.net/sdbi/jenkins-slave-image-mgmt', 'maven')
-        }
-    }
     podTemplate(cloud: 'openshift', inheritFrom: 'maven', label: 'imageMgmt',
             containers: [containerTemplate(
                     name: 'jnlp',
@@ -46,10 +41,10 @@ node() {
         openshiftBuild bldCfg: 'topbeat-build', showBuildLogs: 'true', verbose: 'false', waitTime: '5', waitUnit: 'min'
     }
 }
-//node('jenkins-slave-image-mgmt') {
 imageMgmtNode() {
     stage("Promote images") {
-        withCredentials([string(credentialsId: 'SECRET_ARTIFACTORY_TOKEN', variable: 'ARTIFACTORY_API_KEY')]) {
+    withCredentials([usernameColonPassword(credentialsId: 'artifactory', variable: 'SKOPEO_DEST_CREDENTIALS')]) {
+        withEnv(["SKOPEO_SRC_CREDENTIALS=${dockerToken()}"]) {
             sh "promoteToArtifactory.sh -i sdbi/elasticsearch -t latest -r sdbi-docker-release-local -c"
             sh "promoteToArtifactory.sh -i sdbi/kibana -t latest -r sdbi-docker-release-local -c"
             sh "promoteToArtifactory.sh -i sdbi/logstash -t latest -r sdbi-docker-release-local -c"
@@ -59,3 +54,4 @@ imageMgmtNode() {
         }
     }
 }
+
