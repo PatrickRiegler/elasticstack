@@ -1,0 +1,21 @@
+{
+    "kind": "ImageStream",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "six-jenkins"
+    },
+    "spec": {
+        "tags": [
+            {
+                "name": "latest",
+                "from": {
+                    "kind": "DockerImage",
+                    "name": "artifactory.six-group.net/opc/jenkins:latest"
+                },
+                "importPolicy": {
+                    "scheduled": true
+                }
+            }
+        ]
+    }
+}
