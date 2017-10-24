@@ -17,7 +17,7 @@ def dockerToken(String login = "serviceaccount") {
 } 
 
 def imageMgmtNode(Closure body) {
-    withCredentials([usernameColonPassword(credentialsId: 'openshift-cbk-mepo-service-artifactory', variable: 'SKOPEO_DEST_CREDENTIALS')]) {
+    withCredentials([usernameColonPassword(credentialsId: 'artifactory', variable: 'SKOPEO_DEST_CREDENTIALS')]) {
         withEnv(["SKOPEO_SRC_CREDENTIALS=${dockerToken()}"]) {
             customNode(body, 'imageMgmt', 'artifactory.six-group.net/sdbi/jenkins-slave-image-mgmt', 'maven')
         }
