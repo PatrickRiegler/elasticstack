@@ -98,7 +98,7 @@
                 "imageChange": {
                     "from": {
                         "kind": "ImageStreamTag",
-                        "name": "six-rhel7:latest"
+                        "name": "oracle-java-server-jre-8:latest"
                     }
                 }
             }
@@ -140,7 +140,7 @@
                 "imageChange": {
                     "from": {
                         "kind": "ImageStreamTag",
-                        "name": "six-rhel7:latest"
+                        "name": "oracle-java-server-jre-8:latest"
                     }
                 }
             }
@@ -182,7 +182,7 @@
                 "imageChange": {
                     "from": {
                         "kind": "ImageStreamTag",
-                        "name": "six-rhel7:latest"
+                        "name": "oracle-java-server-jre-8:latest"
                     }
                 }
             }
@@ -224,7 +224,7 @@
                 "imageChange": {
                     "from": {
                         "kind": "ImageStreamTag",
-                        "name": "six-rhel7:latest"
+                        "name": "oracle-java-server-jre-8:latest"
                     }
                 }
             }
@@ -266,7 +266,7 @@
                 "imageChange": {
                     "from": {
                         "kind": "ImageStreamTag",
-                        "name": "six-rhel7:latest"
+                        "name": "oracle-java-server-jre-8:latest"
                     }
                 }
             }
@@ -308,7 +308,7 @@
                 "imageChange": {
                     "from": {
                         "kind": "ImageStreamTag",
-                        "name": "six-rhel7:latest"
+                        "name": "oracle-java-server-jre-8:latest"
                     }
                 }
             }
@@ -340,7 +340,7 @@
           "dockerStrategy": {
             "from": {
               "kind": "ImageStreamTag",
-              "name": "oracle-java-jdk-8:latest"
+              "name": "	oracle-java-server-jre-8:latest"
             },
             "forcePull": true,
             "dockerfilePath": "elasticsearch/Dockerfile"
@@ -379,7 +379,7 @@
           "dockerStrategy": {
             "from": {
               "kind": "ImageStreamTag",
-              "name": "oracle-java-jdk-8:latest"
+              "name": "oracle-java-server-jre-8:latest"
             },
             "forcePull": true,
             "dockerfilePath": "kibana/Dockerfile"
@@ -418,7 +418,7 @@
           "dockerStrategy": {
             "from": {
               "kind": "ImageStreamTag",
-              "name": "oracle-java-jdk-8:latest"
+              "name": "	oracle-java-server-jre-8:latest"
             },
             "forcePull": true,
             "dockerfilePath": "metricbeat/Dockerfile"
@@ -457,7 +457,7 @@
           "dockerStrategy": {
             "from": {
               "kind": "ImageStreamTag",
-              "name": "oracle-java-jdk-8:latest"
+              "name": "oracle-java-server-jre-8:latest"
             },
             "forcePull": true,
             "dockerfilePath": "topbeat/Dockerfile"
@@ -496,7 +496,7 @@
           "dockerStrategy": {
             "from": {
               "kind": "ImageStreamTag",
-              "name": "oracle-java-jdk-8:latest"
+              "name": "oracle-java-server-jre-8:latest"
             },
             "forcePull": true,
             "dockerfilePath": "packetbeat/Dockerfile"
@@ -535,7 +535,7 @@
           "dockerStrategy": {
             "from": {
               "kind": "ImageStreamTag",
-              "name": "oracle-java-jdk-8:latest"
+              "name": "oracle-java-server-jre-8:latest"
             },
             "forcePull": true,
             "dockerfilePath": "logstash/Dockerfile"
