@@ -13,7 +13,7 @@ RUN chmod -R 755 ${INSTALL_DIR} ${HOME_DIR} \
 	&& fix-permissions.sh ${PROD_HOME} \
 	&& fix-permissions.sh ${PROD_INSTALL}
 
-RUN yum install -y hostname* \
+RUN yum install -y hostname* iputils \
 	&& yum clean all
 
 RUN echo $ARTIFACTORY_CREDENTIALS
@@ -31,4 +31,6 @@ RUN \
   mkdir -p ${PROD_HOME} && \
   chown -R ${RUN_USER}:${RUN_USER} ${PROD_INSTALL} ${PROD_HOME} && \
   chmod -R g+w ${PROD_HOME}
+
+ENV PATH=${PATH}:${PROD_INSTALL}
 
