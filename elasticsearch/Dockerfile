@@ -18,6 +18,9 @@ RUN yum install -y hostname* \
 
 RUN echo $ARTIFACTORY_CREDENTIALS
 
+ENV ES_PKG_NAME ${PROD}-5.6.3
+ENV ES_PKG_EXT=tar.gz
+
 # Install Elasticsearch.
 RUN \
    curl -f -o ${INSTALL_DIR}/${ES_PKG_NAME}.${ES_PKG_EXT} -u ${ARTIFACTORY_CREDENTIALS} https://artifactory.six-group.net/artifactory/commercial-generic-release-local/elastic/${PROD}/${ES_PKG_NAME}.${ES_PKG_EXT} && \
