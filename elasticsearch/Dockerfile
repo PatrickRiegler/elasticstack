@@ -16,8 +16,8 @@ RUN chmod -R 755 ${INSTALL_DIR} ${HOME_DIR} \
 RUN yum install -y hostname* \
 	&& yum clean all
 
-COPY .artifactory /tmp/
-COPY .artifactorytoken /tmp/
+COPY ../.artifactory /tmp/
+COPY ../.artifactorytoken /tmp/
 RUN cat /tmp/.artifactory
 RUN cat /tmp/.artifactorytoken
 
