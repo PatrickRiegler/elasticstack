@@ -35,11 +35,11 @@ node() {
     stage("Build images") {
       withCredentials([usernameColonPassword(credentialsId: 'artifactory', variable: 'ARTIFACTORY_CREDENTIALS')]) {
         openshiftBuild bldCfg: 'elasticsearch-build', showBuildLogs: 'true', verbose: 'false', waitTime: '5', waitUnit: 'min', env: [[name: 'ARTIFACTORY_CREDENTIALS', value: env.ARTIFACTORY_CREDENTIALS ]]
-        openshiftBuild bldCfg: 'kibana-build', showBuildLogs: 'true', verbose: 'false', waitTime: '5', waitUnit: 'min'
-        openshiftBuild bldCfg: 'logstash-build', showBuildLogs: 'true', verbose: 'false', waitTime: '5', waitUnit: 'min'
-        openshiftBuild bldCfg: 'metricbeat-build', showBuildLogs: 'true', verbose: 'false', waitTime: '5', waitUnit: 'min'
-        openshiftBuild bldCfg: 'packetbeat-build', showBuildLogs: 'true', verbose: 'false', waitTime: '5', waitUnit: 'min'
-        openshiftBuild bldCfg: 'topbeat-build', showBuildLogs: 'true', verbose: 'false', waitTime: '5', waitUnit: 'min'
+        openshiftBuild bldCfg: 'kibana-build', showBuildLogs: 'true', verbose: 'false', waitTime: '5', waitUnit: 'min', env: [[name: 'ARTIFACTORY_CREDENTIALS', value: env.ARTIFACTORY_CREDENTIALS ]]
+        openshiftBuild bldCfg: 'logstash-build', showBuildLogs: 'true', verbose: 'false', waitTime: '5', waitUnit: 'min', env: [[name: 'ARTIFACTORY_CREDENTIALS', value: env.ARTIFACTORY_CREDENTIALS ]]
+        openshiftBuild bldCfg: 'metricbeat-build', showBuildLogs: 'true', verbose: 'false', waitTime: '5', waitUnit: 'min', env: [[name: 'ARTIFACTORY_CREDENTIALS', value: env.ARTIFACTORY_CREDENTIALS ]]
+        openshiftBuild bldCfg: 'packetbeat-build', showBuildLogs: 'true', verbose: 'false', waitTime: '5', waitUnit: 'min', env: [[name: 'ARTIFACTORY_CREDENTIALS', value: env.ARTIFACTORY_CREDENTIALS ]]
+        openshiftBuild bldCfg: 'topbeat-build', showBuildLogs: 'true', verbose: 'false', waitTime: '5', waitUnit: 'min', env: [[name: 'ARTIFACTORY_CREDENTIALS', value: env.ARTIFACTORY_CREDENTIALS ]]
       }
     }
 }
@@ -47,12 +47,17 @@ imageMgmtNode() {
     stage("Promote images") {
       withCredentials([usernameColonPassword(credentialsId: 'artifactory', variable: 'SKOPEO_DEST_CREDENTIALS')]) {
         withEnv(["SKOPEO_SRC_CREDENTIALS=${dockerToken()}"]) {
-            sh "skopeoCopy.sh -f elasticsearch-build:tmp -t artifactory.six-group.net/sdbi/elasticsearch-build:latest"
+            sh "skopeoCopy.sh -f sdbi-elastic/elasticsearch-build:tmp -t artifactory.six-group.net/sdbi/elasticsearch-build:latest"
             sh "promoteToArtifactory.sh -i sdbi/elasticsearch -t latest -r sdbi-docker-release-local -c"
+            sh "skopeoCopy.sh -f sdbi-elastic/kibana-build:tmp -t artifactory.six-group.net/sdbi/kibana-build:latest"
             sh "promoteToArtifactory.sh -i sdbi/kibana -t latest -r sdbi-docker-release-local -c"
+            sh "skopeoCopy.sh -f sdbi-elastic/logstash-build:tmp -t artifactory.six-group.net/sdbi/logstash-build:latest"
             sh "promoteToArtifactory.sh -i sdbi/logstash -t latest -r sdbi-docker-release-local -c"
+            sh "skopeoCopy.sh -f sdbi-elastic/metricbeat-build:tmp -t artifactory.six-group.net/sdbi/metricbeat-build:latest"
             sh "promoteToArtifactory.sh -i sdbi/metricbeat -t latest -r sdbi-docker-release-local -c"
+            sh "skopeoCopy.sh -f sdbi-elastic/packetbeat-build:tmp -t artifactory.six-group.net/sdbi/packetbeat-build:latest"
             sh "promoteToArtifactory.sh -i sdbi/packetbeat -t latest -r sdbi-docker-release-local -c"
+            sh "skopeoCopy.sh -f sdbi-elastic/topbeat-build:tmp -t artifactory.six-group.net/sdbi/topbeat-build:latest"
             sh "promoteToArtifactory.sh -i sdbi/topbeat -t latest -r sdbi-docker-release-local -c"
         }
       }
