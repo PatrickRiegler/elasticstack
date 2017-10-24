@@ -16,12 +16,14 @@ RUN chmod -R 755 ${INSTALL_DIR} ${HOME_DIR} \
 RUN yum install -y hostname* \
 	&& yum clean all
 
-RUN cat secrets/.artifactory
-RUN cat secrets/.artifactorytoken
+COPY .artifactory /tmp/
+COPY .artifactorytoken /tmp/
+RUN cat /tmp/.artifactory
+RUN cat /tmp/.artifactorytoken
 
 # Install Elasticsearch.
 RUN \
-   curl -f -o ${INSTALL_DIR}/${ES_PKG_NAME}.${ES_PKG_EXT} -u $(cat secrets/.artifactorytoken) https://artifactory.six-group.net/artifactory/commercial-generic-release-local/elastic/${PROD}/${ES_PKG_NAME}.${ES_PKG_EXT} && \
+   curl -f -o ${INSTALL_DIR}/${ES_PKG_NAME}.${ES_PKG_EXT} -u $(cat /tmp/.artifactorytoken) https://artifactory.six-group.net/artifactory/commercial-generic-release-local/elastic/${PROD}/${ES_PKG_NAME}.${ES_PKG_EXT} && \
   cd ${INSTALL_DIR} && \
   tar xzf ${ES_PKG_NAME}.${ES_PKG_EXT} && \
   rm -f ${ES_PKG_NAME}.${ES_PKG_EXT} && \
