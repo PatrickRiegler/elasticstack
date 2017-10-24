@@ -51,6 +51,7 @@ imageMgmtNode() {
       project = sh returnStdout: true, script: "oc get is elasticsearch-build --template='{{ .status.dockerImageRepository }}' | cut -d/ -f2"
       withCredentials([usernameColonPassword(credentialsId: 'artifactory', variable: 'SKOPEO_DEST_CREDENTIALS')]) {
         withEnv(["SKOPEO_SRC_CREDENTIALS=${dockerToken()}"]) {
+            sh "echo skopeoCopy.sh -f ${registry}/${project}/elasticsearch-build:tmp -t artifactory.six-group.net/sdbi/elasticsearch-build:latest"
             sh "skopeoCopy.sh -f ${registry}/${project}/elasticsearch-build:tmp -t artifactory.six-group.net/sdbi/elasticsearch-build:latest"
             sh "promoteToArtifactory.sh -i sdbi/elasticsearch -t latest -r sdbi-docker-release-local -c"
             sh "skopeoCopy.sh -f ${registry}/${project}/kibana-build:tmp -t artifactory.six-group.net/sdbi/kibana-build:latest"
