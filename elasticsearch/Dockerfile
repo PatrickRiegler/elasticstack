@@ -20,7 +20,7 @@ RUN echo $ARTIFACTORY_CREDENTIALS
 
 # Install Elasticsearch.
 RUN \
-   curl -f -o ${INSTALL_DIR}/${ES_PKG_NAME}.${ES_PKG_EXT} -u ${AUTH} https://artifactory.six-group.net/artifactory/commercial-generic-release-local/elastic/${PROD}/${ES_PKG_NAME}.${ES_PKG_EXT} && \
+   curl -f -o ${INSTALL_DIR}/${ES_PKG_NAME}.${ES_PKG_EXT} -u ${ARTIFACTORY_CREDENTIALS} https://artifactory.six-group.net/artifactory/commercial-generic-release-local/elastic/${PROD}/${ES_PKG_NAME}.${ES_PKG_EXT} && \
   cd ${INSTALL_DIR} && \
   tar xzf ${ES_PKG_NAME}.${ES_PKG_EXT} && \
   rm -f ${ES_PKG_NAME}.${ES_PKG_EXT} && \
