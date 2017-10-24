@@ -315,5 +315,233 @@
         ]
       }
     },
+    {
+      "kind": "BuildConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "elasticsearch-build",
+        "labels": {
+          "sdbi": "elasticsearch"
+        }
+      },
+      "spec": {
+        "runPolicy": "Serial",
+        "source": {
+          "type": "Git",
+          "git": {
+            "uri": "ssh://git@stash.six-group.net:22/sdbi/elasticstack.git"
+          },
+          "sourceSecret": {
+            "name": "bitbucket-secret"
+          }
+        },
+        "strategy": {
+          "type": "Docker",
+          "dockerStrategy": {
+            "from": {
+              "kind": "ImageStreamTag",
+              "name": "oracle-java-jdk-8:latest"
+            },
+            "forcePull": true
+          }
+        },
+        "output": {
+          "to": {
+            "kind": "ImageStreamTag",
+            "name": "elasticsearch-build:tmp"
+          }
+        }
+      }
+    },
+    {
+      "kind": "BuildConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "kibana-build",
+        "labels": {
+          "sdbi": "kibana"
+        }
+      },
+      "spec": {
+        "runPolicy": "Serial",
+        "source": {
+          "type": "Git",
+          "git": {
+            "uri": "ssh://git@stash.six-group.net:22/sdbi/elasticstack.git"
+          },
+          "sourceSecret": {
+            "name": "bitbucket-secret"
+          }
+        },
+        "strategy": {
+          "type": "Docker",
+          "dockerStrategy": {
+            "from": {
+              "kind": "ImageStreamTag",
+              "name": "oracle-java-jdk-8:latest"
+            },
+            "forcePull": true
+          }
+        },
+        "output": {
+          "to": {
+            "kind": "ImageStreamTag",
+            "name": "kibana-build:tmp"
+          }
+        }
+      }
+    },
+    {
+      "kind": "BuildConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "metricbeat-build",
+        "labels": {
+          "sdbi": "metricbeat"
+        }
+      },
+      "spec": {
+        "runPolicy": "Serial",
+        "source": {
+          "type": "Git",
+          "git": {
+            "uri": "ssh://git@stash.six-group.net:22/sdbi/elasticstack.git"
+          },
+          "sourceSecret": {
+            "name": "bitbucket-secret"
+          }
+        },
+        "strategy": {
+          "type": "Docker",
+          "dockerStrategy": {
+            "from": {
+              "kind": "ImageStreamTag",
+              "name": "oracle-java-jdk-8:latest"
+            },
+            "forcePull": true
+          }
+        },
+        "output": {
+          "to": {
+            "kind": "ImageStreamTag",
+            "name": "metricbeat-build:tmp"
+          }
+        }
+      }
+    },
+    {
+      "kind": "BuildConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "topbeat-build",
+        "labels": {
+          "sdbi": "topbeat"
+        }
+      },
+      "spec": {
+        "runPolicy": "Serial",
+        "source": {
+          "type": "Git",
+          "git": {
+            "uri": "ssh://git@stash.six-group.net:22/sdbi/elasticstack.git"
+          },
+          "sourceSecret": {
+            "name": "bitbucket-secret"
+          }
+        },
+        "strategy": {
+          "type": "Docker",
+          "dockerStrategy": {
+            "from": {
+              "kind": "ImageStreamTag",
+              "name": "oracle-java-jdk-8:latest"
+            },
+            "forcePull": true
+          }
+        },
+        "output": {
+          "to": {
+            "kind": "ImageStreamTag",
+            "name": "topbeat-build:tmp"
+          }
+        }
+      }
+    },
+    {
+      "kind": "BuildConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "packetbeat-build",
+        "labels": {
+          "sdbi": "packetbeat"
+        }
+      },
+      "spec": {
+        "runPolicy": "Serial",
+        "source": {
+          "type": "Git",
+          "git": {
+            "uri": "ssh://git@stash.six-group.net:22/sdbi/elasticstack.git"
+          },
+          "sourceSecret": {
+            "name": "bitbucket-secret"
+          }
+        },
+        "strategy": {
+          "type": "Docker",
+          "dockerStrategy": {
+            "from": {
+              "kind": "ImageStreamTag",
+              "name": "oracle-java-jdk-8:latest"
+            },
+            "forcePull": true
+          }
+        },
+        "output": {
+          "to": {
+            "kind": "ImageStreamTag",
+            "name": "packetbeat-build:tmp"
+          }
+        }
+      }
+    },
+    {
+      "kind": "BuildConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "logstash-build",
+        "labels": {
+          "sdbi": "logstash"
+        }
+      },
+      "spec": {
+        "runPolicy": "Serial",
+        "source": {
+          "type": "Git",
+          "git": {
+            "uri": "ssh://git@stash.six-group.net:22/sdbi/elasticstack.git"
+          },
+          "sourceSecret": {
+            "name": "bitbucket-secret"
+          }
+        },
+        "strategy": {
+          "type": "Docker",
+          "dockerStrategy": {
+            "from": {
+              "kind": "ImageStreamTag",
+              "name": "oracle-java-jdk-8:latest"
+            },
+            "forcePull": true
+          }
+        },
+        "output": {
+          "to": {
+            "kind": "ImageStreamTag",
+            "name": "logstash-build:tmp"
+          }
+        }
+      }
+    }
   ]
 }
