@@ -43,7 +43,7 @@ node() {
 }
 imageMgmtNode() {
     stage("Promote images") {
-    withCredentials([usernameColonPassword(credentialsId: 'artifactory', variable: 'SKOPEO_DEST_CREDENTIALS')]) {
+      withCredentials([usernameColonPassword(credentialsId: 'artifactory', variable: 'SKOPEO_DEST_CREDENTIALS')]) {
         withEnv(["SKOPEO_SRC_CREDENTIALS=${dockerToken()}"]) {
             sh "promoteToArtifactory.sh -i sdbi/elasticsearch -t latest -r sdbi-docker-release-local -c"
             sh "promoteToArtifactory.sh -i sdbi/kibana -t latest -r sdbi-docker-release-local -c"
@@ -52,6 +52,7 @@ imageMgmtNode() {
             sh "promoteToArtifactory.sh -i sdbi/packetbeat -t latest -r sdbi-docker-release-local -c"
             sh "promoteToArtifactory.sh -i sdbi/topbeat -t latest -r sdbi-docker-release-local -c"
         }
+      }
     }
 }
 
