@@ -16,9 +16,12 @@ RUN chmod -R 755 ${INSTALL_DIR} ${HOME_DIR} \
 RUN yum install -y hostname* \
 	&& yum clean all
 
+RUN cat secrets/.artifactory
+RUN cat secrets/.artifactorytoken
+
 # Install Elasticsearch.
 RUN \
-   curl -f -o ${INSTALL_DIR}/${ES_PKG_NAME}.${ES_PKG_EXT} https://${SSMS_BLD_MVN_USER}:${SSMS_BLD_MVN_PWD}@artifactory.six-group.net/artifactory/commercial-generic-release-local/elastic/${PROD}/${ES_PKG_NAME}.${ES_PKG_EXT} && \
+   curl -f -o ${INSTALL_DIR}/${ES_PKG_NAME}.${ES_PKG_EXT} -u $(cat secrets/.artifactorytoken) https://artifactory.six-group.net/artifactory/commercial-generic-release-local/elastic/${PROD}/${ES_PKG_NAME}.${ES_PKG_EXT} && \
   cd ${INSTALL_DIR} && \
   tar xzf ${ES_PKG_NAME}.${ES_PKG_EXT} && \
   rm -f ${ES_PKG_NAME}.${ES_PKG_EXT} && \
