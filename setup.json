@@ -1,1 +1,319 @@
-// to be added
+{
+  "kind": "List",
+  "apiVersion": "v1",
+  "metadata": {},
+  "items": [
+    {
+      "kind": "ImageStream",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "elasticsearch-build",
+        "labels": {
+          "sdbi": "elasticsearch"
+        }
+      }
+    },
+    {
+      "kind": "ImageStream",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "kibana-build",
+        "labels": {
+          "sdbi": "kibana"
+        }
+      }
+    },
+    {
+      "kind": "ImageStream",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "metricbeat-build",
+        "labels": {
+          "sdbi": "metricbeat"
+        }
+      }
+    },
+    {
+      "kind": "ImageStream",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "topbeat-build",
+        "labels": {
+          "sdbi": "topbeat"
+        }
+      }
+    },
+    {
+      "kind": "ImageStream",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "packetbeat-build",
+        "labels": {
+          "sdbi": "packetbeat"
+        }
+      }
+    },
+    {
+      "kind": "ImageStream",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "logstash-build",
+        "labels": {
+          "sdbi": "logstash"
+        }
+      }
+    },
+    {
+      "kind": "BuildConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "elasticsearch-pipeline",
+        "labels": {
+          "sdbi": "elasticsearch"
+        },
+        "annotations": {
+          "pipeline.alpha.openshift.io/uses": "[{\"name\": \"jenkins\", \"kind\": \"DeploymentConfig\"}]"
+        }
+      },
+      "spec": {
+        "source": {
+          "type": "Git",
+          "git": {
+            "uri": "ssh://git@stash.six-group.net:22/sdbi/elasticstack.git",
+            "ref": "develop"
+          },
+          "sourceSecret": {
+            "name": "bitbucket-secret"
+          }
+        },
+        "strategy": {
+          "type": "JenkinsPipeline",
+          "jenkinsPipelineStrategy": {
+            "jenkinsfilePath": "elasticsearch/Jenkinsfile"
+          }
+        },
+        "triggers": [
+            {
+                "type": "ImageChange",
+                "imageChange": {
+                    "from": {
+                        "kind": "ImageStreamTag",
+                        "name": "six-rhel7:latest"
+                    }
+                }
+            }
+        ]
+      }
+    },
+    {
+      "kind": "BuildConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "kibana-pipeline",
+        "labels": {
+          "sdbi": "kibana"
+        },
+        "annotations": {
+          "pipeline.alpha.openshift.io/uses": "[{\"name\": \"jenkins\", \"kind\": \"DeploymentConfig\"}]"
+        }
+      },
+      "spec": {
+        "source": {
+          "type": "Git",
+          "git": {
+            "uri": "ssh://git@stash.six-group.net:22/sdbi/elasticstack.git",
+            "ref": "develop"
+          },
+          "sourceSecret": {
+            "name": "bitbucket-secret"
+          }
+        },
+        "strategy": {
+          "type": "JenkinsPipeline",
+          "jenkinsPipelineStrategy": {
+            "jenkinsfilePath": "kibana/Jenkinsfile"
+          }
+        },
+        "triggers": [
+            {
+                "type": "ImageChange",
+                "imageChange": {
+                    "from": {
+                        "kind": "ImageStreamTag",
+                        "name": "six-rhel7:latest"
+                    }
+                }
+            }
+        ]
+      }
+    },
+    {
+      "kind": "BuildConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "metricbeat-pipeline",
+        "labels": {
+          "sdbi": "metricbeat"
+        },
+        "annotations": {
+          "pipeline.alpha.openshift.io/uses": "[{\"name\": \"jenkins\", \"kind\": \"DeploymentConfig\"}]"
+        }
+      },
+      "spec": {
+        "source": {
+          "type": "Git",
+          "git": {
+            "uri": "ssh://git@stash.six-group.net:22/sdbi/elasticstack.git",
+            "ref": "develop"
+          },
+          "sourceSecret": {
+            "name": "bitbucket-secret"
+          }
+        },
+        "strategy": {
+          "type": "JenkinsPipeline",
+          "jenkinsPipelineStrategy": {
+            "jenkinsfilePath": "metricbeat/Jenkinsfile"
+          }
+        },
+        "triggers": [
+            {
+                "type": "ImageChange",
+                "imageChange": {
+                    "from": {
+                        "kind": "ImageStreamTag",
+                        "name": "six-rhel7:latest"
+                    }
+                }
+            }
+        ]
+      }
+    },
+    {
+      "kind": "BuildConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "topbeat-pipeline",
+        "labels": {
+          "sdbi": "topbeat"
+        },
+        "annotations": {
+          "pipeline.alpha.openshift.io/uses": "[{\"name\": \"jenkins\", \"kind\": \"DeploymentConfig\"}]"
+        }
+      },
+      "spec": {
+        "source": {
+          "type": "Git",
+          "git": {
+            "uri": "ssh://git@stash.six-group.net:22/sdbi/elasticstack.git",
+            "ref": "develop"
+          },
+          "sourceSecret": {
+            "name": "bitbucket-secret"
+          }
+        },
+        "strategy": {
+          "type": "JenkinsPipeline",
+          "jenkinsPipelineStrategy": {
+            "jenkinsfilePath": "topbeat/Jenkinsfile"
+          }
+        },
+        "triggers": [
+            {
+                "type": "ImageChange",
+                "imageChange": {
+                    "from": {
+                        "kind": "ImageStreamTag",
+                        "name": "six-rhel7:latest"
+                    }
+                }
+            }
+        ]
+      }
+    },
+    {
+      "kind": "BuildConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "packetbeat-pipeline",
+        "labels": {
+          "sdbi": "packetbeat"
+        },
+        "annotations": {
+          "pipeline.alpha.openshift.io/uses": "[{\"name\": \"jenkins\", \"kind\": \"DeploymentConfig\"}]"
+        }
+      },
+      "spec": {
+        "source": {
+          "type": "Git",
+          "git": {
+            "uri": "ssh://git@stash.six-group.net:22/sdbi/elasticstack.git",
+            "ref": "develop"
+          },
+          "sourceSecret": {
+            "name": "bitbucket-secret"
+          }
+        },
+        "strategy": {
+          "type": "JenkinsPipeline",
+          "jenkinsPipelineStrategy": {
+            "jenkinsfilePath": "packetbeat/Jenkinsfile"
+          }
+        },
+        "triggers": [
+            {
+                "type": "ImageChange",
+                "imageChange": {
+                    "from": {
+                        "kind": "ImageStreamTag",
+                        "name": "six-rhel7:latest"
+                    }
+                }
+            }
+        ]
+      }
+    },
+    {
+      "kind": "BuildConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "logstash-pipeline",
+        "labels": {
+          "sdbi": "logstash"
+        },
+        "annotations": {
+          "pipeline.alpha.openshift.io/uses": "[{\"name\": \"jenkins\", \"kind\": \"DeploymentConfig\"}]"
+        }
+      },
+      "spec": {
+        "source": {
+          "type": "Git",
+          "git": {
+            "uri": "ssh://git@stash.six-group.net:22/sdbi/elasticstack.git",
+            "ref": "develop"
+          },
+          "sourceSecret": {
+            "name": "bitbucket-secret"
+          }
+        },
+        "strategy": {
+          "type": "JenkinsPipeline",
+          "jenkinsPipelineStrategy": {
+            "jenkinsfilePath": "logstash/Jenkinsfile"
+          }
+        },
+        "triggers": [
+            {
+                "type": "ImageChange",
+                "imageChange": {
+                    "from": {
+                        "kind": "ImageStreamTag",
+                        "name": "six-rhel7:latest"
+                    }
+                }
+            }
+        ]
+      }
+    },
+  ]
+}
