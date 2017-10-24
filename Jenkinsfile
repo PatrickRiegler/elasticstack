@@ -45,19 +45,23 @@ node() {
 }
 imageMgmtNode() {
     stage("Promote images") {
+      def registry
+      def project
+      registry = sh returnStdout: true, script: "oc get is elasticsearch-build --template='{{ .status.dockerImageRepository }}' | cut -d/ -f1"
+      project = sh returnStdout: true, script: "oc get is elasticsearch-build --template='{{ .status.dockerImageRepository }}' | cut -d/ -f2"
       withCredentials([usernameColonPassword(credentialsId: 'artifactory', variable: 'SKOPEO_DEST_CREDENTIALS')]) {
         withEnv(["SKOPEO_SRC_CREDENTIALS=${dockerToken()}"]) {
-            sh "skopeoCopy.sh -f sdbi-elastic/elasticsearch-build:tmp -t artifactory.six-group.net/sdbi/elasticsearch-build:latest"
+            sh "skopeoCopy.sh -f ${registry}/${project}/elasticsearch-build:tmp -t artifactory.six-group.net/sdbi/elasticsearch-build:latest"
             sh "promoteToArtifactory.sh -i sdbi/elasticsearch -t latest -r sdbi-docker-release-local -c"
-            sh "skopeoCopy.sh -f sdbi-elastic/kibana-build:tmp -t artifactory.six-group.net/sdbi/kibana-build:latest"
+            sh "skopeoCopy.sh -f ${registry}/${project}/kibana-build:tmp -t artifactory.six-group.net/sdbi/kibana-build:latest"
             sh "promoteToArtifactory.sh -i sdbi/kibana -t latest -r sdbi-docker-release-local -c"
-            sh "skopeoCopy.sh -f sdbi-elastic/logstash-build:tmp -t artifactory.six-group.net/sdbi/logstash-build:latest"
+            sh "skopeoCopy.sh -f ${registry}/${project}/logstash-build:tmp -t artifactory.six-group.net/sdbi/logstash-build:latest"
             sh "promoteToArtifactory.sh -i sdbi/logstash -t latest -r sdbi-docker-release-local -c"
-            sh "skopeoCopy.sh -f sdbi-elastic/metricbeat-build:tmp -t artifactory.six-group.net/sdbi/metricbeat-build:latest"
+            sh "skopeoCopy.sh -f ${registry}/${project}/metricbeat-build:tmp -t artifactory.six-group.net/sdbi/metricbeat-build:latest"
             sh "promoteToArtifactory.sh -i sdbi/metricbeat -t latest -r sdbi-docker-release-local -c"
-            sh "skopeoCopy.sh -f sdbi-elastic/packetbeat-build:tmp -t artifactory.six-group.net/sdbi/packetbeat-build:latest"
+            sh "skopeoCopy.sh -f ${registry}/${project}/packetbeat-build:tmp -t artifactory.six-group.net/sdbi/packetbeat-build:latest"
             sh "promoteToArtifactory.sh -i sdbi/packetbeat -t latest -r sdbi-docker-release-local -c"
-            sh "skopeoCopy.sh -f sdbi-elastic/topbeat-build:tmp -t artifactory.six-group.net/sdbi/topbeat-build:latest"
+            sh "skopeoCopy.sh -f ${registry}/${project}/topbeat-build:tmp -t artifactory.six-group.net/sdbi/topbeat-build:latest"
             sh "promoteToArtifactory.sh -i sdbi/topbeat -t latest -r sdbi-docker-release-local -c"
         }
       }
