@@ -41,6 +41,7 @@ node() {
         openshiftBuild bldCfg: 'topbeat-build', showBuildLogs: 'true', verbose: 'false', waitTime: '5', waitUnit: 'min'
     }
 }
+/*
 imageMgmtNode() {
     stage("Promote images") {
       withCredentials([usernameColonPassword(credentialsId: 'artifactory', variable: 'SKOPEO_DEST_CREDENTIALS')]) {
@@ -55,4 +56,4 @@ imageMgmtNode() {
       }
     }
 }
-
+*/
