@@ -2,6 +2,39 @@ properties([
   buildDiscarder(logRotator(numToKeepStr: '5'))
 ])
 
+def dockerToken(String login = "serviceaccount") {
+  node() {
+    // Read the auth token from the file defined in the env variable AUTH_TOKEN
+    String token = sh returnStdout: true, script: 'cat ${AUTH_TOKEN}'
+    String prefix
+    if (login) {
+      prefix = "${login}:"
+    } else {
+      prefix = ''
+    }
+    return prefix + token
+  }
+} 
+
+def imageMgmtNode(Closure body) {
+    withCredentials([usernameColonPassword(credentialsId: 'openshift-cbk-mepo-service-artifactory', variable: 'SKOPEO_DEST_CREDENTIALS')]) {
+        withEnv(["SKOPEO_SRC_CREDENTIALS=${dockerToken()}"]) {
+            customNode(body, 'imageMgmt', 'artifactory.six-group.net/sdbi/jenkins-slave-image-mgmt', 'maven')
+        }
+    }
+    podTemplate(cloud: 'openshift', inheritFrom: 'maven', label: 'imageMgmt',
+            containers: [containerTemplate(
+                    name: 'jnlp',
+                    image: 'artifactory.six-group.net/sdbi/jenkins-slave-image-mgmt',
+                    alwaysPullImage: true,
+                    args: '${computer.jnlpmac} ${computer.name}',
+                    workingDir: '/tmp')]
+    ) {
+        node('imageMgmt') {
+            body.call()
+        }
+    }
+}
 
 node() {
     stage("Build images") {
@@ -13,7 +46,8 @@ node() {
         openshiftBuild bldCfg: 'topbeat-build', showBuildLogs: 'true', verbose: 'false', waitTime: '5', waitUnit: 'min'
     }
 }
-node('jenkins-slave-image-mgmt') {
+//node('jenkins-slave-image-mgmt') {
+node('imageMgmt') {
     stage("Promote images") {
         withCredentials([string(credentialsId: 'SECRET_ARTIFACTORY_TOKEN', variable: 'ARTIFACTORY_API_KEY')]) {
             sh "promoteToArtifactory.sh -i sdbi/elasticsearch -t latest -r sdbi-docker-release-local -c"
