@@ -8,6 +8,8 @@ ENV INSTALL_DIR=/opt/elastic
 ENV PROD=elasticsearch
 ENV PROD_INSTALL=${INSTALL_DIR}/${PROD} PROD_HOME=${HOME_DIR}/${PROD}
 
+ARG AUTH
+
 RUN mkdir -p ${PROD_HOME} ${PROD_INSTALL}
 RUN chmod -R 755 ${INSTALL_DIR} ${HOME_DIR} \
 	&& fix-permissions.sh ${PROD_HOME} \
@@ -16,14 +18,11 @@ RUN chmod -R 755 ${INSTALL_DIR} ${HOME_DIR} \
 RUN yum install -y hostname* \
 	&& yum clean all
 
-COPY ../.artifactory /tmp/
-COPY ../.artifactorytoken /tmp/
-RUN cat /tmp/.artifactory
-RUN cat /tmp/.artifactorytoken
+RUN echo $AUTH
 
 # Install Elasticsearch.
 RUN \
-   curl -f -o ${INSTALL_DIR}/${ES_PKG_NAME}.${ES_PKG_EXT} -u $(cat /tmp/.artifactorytoken) https://artifactory.six-group.net/artifactory/commercial-generic-release-local/elastic/${PROD}/${ES_PKG_NAME}.${ES_PKG_EXT} && \
+   curl -f -o ${INSTALL_DIR}/${ES_PKG_NAME}.${ES_PKG_EXT} -u ${AUTH} https://artifactory.six-group.net/artifactory/commercial-generic-release-local/elastic/${PROD}/${ES_PKG_NAME}.${ES_PKG_EXT} && \
   cd ${INSTALL_DIR} && \
   tar xzf ${ES_PKG_NAME}.${ES_PKG_EXT} && \
   rm -f ${ES_PKG_NAME}.${ES_PKG_EXT} && \
