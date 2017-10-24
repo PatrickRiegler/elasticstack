@@ -10,7 +10,8 @@ ENV PROD_INSTALL=${INSTALL_DIR}/${PROD} PROD_HOME=${HOME_DIR}/${PROD}
 
 RUN mkdir -p ${PROD_HOME} ${PROD_INSTALL}
 RUN chmod -R 755 ${INSTALL_DIR} ${HOME_DIR} \
-	&& fix-permissions.sh ${PROD_HOME} ${PROD_INSTALL}
+	&& fix-permissions.sh ${PROD_HOME} \
+	&& fix-permissions.sh ${PROD_INSTALL}
 
 RUN yum install -y hostname* \
 	&& yum clean all
