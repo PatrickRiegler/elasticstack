@@ -47,7 +47,7 @@ node() {
     }
 }
 //node('jenkins-slave-image-mgmt') {
-node('imageMgmt') {
+imageMgmtNode() {
     stage("Promote images") {
         withCredentials([string(credentialsId: 'SECRET_ARTIFACTORY_TOKEN', variable: 'ARTIFACTORY_API_KEY')]) {
             sh "promoteToArtifactory.sh -i sdbi/elasticsearch -t latest -r sdbi-docker-release-local -c"
