@@ -30,7 +30,7 @@ RUN \
   mv $ES_PKG_NAME ${PROD} && \
   fix-permissions.sh ${PROD_INSTALL}
 
-COPY start.bash ${PROD_INSTALL}/
+COPY ./start.bash ${PROD_INSTALL}/
 RUN fix-permissions.sh ${PROD_INSTALL}/start.bash && \
 	chmod +x ${PROD_INSTALL}/start.bash
 
