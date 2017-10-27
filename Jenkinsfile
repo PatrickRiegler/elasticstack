@@ -38,6 +38,8 @@ node() {
     stage("Build images") {
       withCredentials([usernameColonPassword(credentialsId: 'artifactory', variable: 'ARTIFACTORY_CREDENTIALS')]) {
         for (i = 0; i < images.size(); i++) {
+          sh "ls -lia /var/lib/jenkins/jobs/sdbi-elastic-elasticstack-pipeline/workspace"
+          sh "tree /var/lib/jenkins/jobs/sdbi-elastic-elasticstack-pipeline/workspace"
           openshiftBuild bldCfg: images[i]+'-build', showBuildLogs: 'true', verbose: 'false', waitTime: '5', waitUnit: 'min', env: [[name: 'ARTIFACTORY_CREDENTIALS', value: env.ARTIFACTORY_CREDENTIALS ]]
         }
       }
