@@ -11,7 +11,7 @@ ENV PROD_INSTALL=${INSTALL_DIR}/${PROD} PROD_HOME=${HOME_DIR}/${PROD}
 RUN mkdir -p ${PROD_HOME} ${INSTALL_DIR}
 RUN chmod -R 755 ${INSTALL_DIR} ${HOME_DIR} \
 	&& fix-permissions.sh ${PROD_HOME} \
-	&& fix-permissions.sh ${PROD_INSTALL}
+	&& fix-permissions.sh ${INSTALL_DIR}
 
 RUN yum install -y hostname* iputils \
 	&& yum clean all
@@ -28,9 +28,7 @@ RUN \
   tar xzf ${ES_PKG_NAME}.${ES_PKG_EXT} && \
   rm -f ${ES_PKG_NAME}.${ES_PKG_EXT} && \
   mv $ES_PKG_NAME ${PROD} && \
-  mkdir -p ${PROD_HOME} && \
-  chown -R ${RUN_USER}:${RUN_USER} ${PROD_INSTALL} ${PROD_HOME} && \
-  chmod -R g+w ${PROD_HOME}
+  fix-permissions.sh ${PROD_INSTALL}
 
 ENV PATH=${PATH}:${PROD_INSTALL}
 
