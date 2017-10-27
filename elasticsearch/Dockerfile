@@ -30,6 +30,10 @@ RUN \
   mv $ES_PKG_NAME ${PROD} && \
   fix-permissions.sh ${PROD_INSTALL}
 
+COPY start.bash ${PROD_INSTALL}/
+RUN fix-permissions.sh ${PROD_INSTALL}/start.bash && \
+	chmod +x ${PROD_INSTALL}/start.bash
+
 ENV PATH=${PATH}:${PROD_INSTALL}
 
 # Define mountable directories.
@@ -41,9 +45,6 @@ WORKDIR ${PROD_INSTALL}
 # Expose ports.
 EXPOSE 9200 9300
 
-RUN yum install -y telnet net-tools \
-        && yum clean all
-
-CMD ${PROD_INSTALL}/bin/elasticsearch
-#CMD ["start.bash"]
+#CMD ${PROD_INSTALL}/bin/elasticsearch
+CMD ["start.bash"]
 
