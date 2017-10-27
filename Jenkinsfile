@@ -37,8 +37,8 @@ images = [ "elasticsearch", "kibana", "logstash", "metricbeat", "packetbeat", "t
 node() {
     stage("Build images") {
       withCredentials([usernameColonPassword(credentialsId: 'artifactory', variable: 'ARTIFACTORY_CREDENTIALS')]) {
-        for (i = 0; i < images.length; i++) {
-          openshiftBuild bldCfg: $images[i]+'-build', showBuildLogs: 'true', verbose: 'false', waitTime: '5', waitUnit: 'min', env: [[name: 'ARTIFACTORY_CREDENTIALS', value: env.ARTIFACTORY_CREDENTIALS ]]
+        for (i = 0; i < images.size(); i++) {
+          openshiftBuild bldCfg: images[i]+'-build', showBuildLogs: 'true', verbose: 'false', waitTime: '5', waitUnit: 'min', env: [[name: 'ARTIFACTORY_CREDENTIALS', value: env.ARTIFACTORY_CREDENTIALS ]]
         }
 	/*
         openshiftBuild bldCfg: 'elasticsearch-build', showBuildLogs: 'true', verbose: 'false', waitTime: '5', waitUnit: 'min', env: [[name: 'ARTIFACTORY_CREDENTIALS', value: env.ARTIFACTORY_CREDENTIALS ]]
@@ -61,8 +61,8 @@ imageMgmtNode() {
       project = sh(returnStdout: true, script: "oc get is elasticsearch-build --template='{{ .status.dockerImageRepository }}' | cut -d/ -f2").trim()
       withCredentials([usernameColonPassword(credentialsId: 'artifactory', variable: 'SKOPEO_DEST_CREDENTIALS')]) {
         withEnv(["SKOPEO_SRC_CREDENTIALS=${dockerToken()}"]) {
-          for (i = 0; i < images.length; i++) {
-            sh "echo skopeoCopy.sh -f ${registry}/${project}/' + $images[$i] + '-build:tmp -t artifactory.six-group.net/sdbi/' + $images[$i] + '-build:latest"
+          for (i = 0; i < images.size(); i++) {
+            sh "echo skopeoCopy.sh -f ${registry}/${project}/' + images[i] + '-build:tmp -t artifactory.six-group.net/sdbi/' + images[i] + '-build:latest"
           }
             /*
             sh "skopeoCopy.sh -f ${registry}/${project}/elasticsearch-build:tmp -t artifactory.six-group.net/sdbi/elasticsearch-build:latest"
