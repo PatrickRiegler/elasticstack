@@ -34,3 +34,15 @@ RUN \
 
 ENV PATH=${PATH}:${PROD_INSTALL}
 
+# Define mountable directories.
+VOLUME ${PROD_HOME}
+
+# Define working directory.
+WORKDIR ${PROD_INSTALL}
+
+# Expose ports.
+EXPOSE 9200 9300
+
+CMD ${PROD_INSTALL}/bin/elasticsearch
+#CMD ["start.bash"]
+
