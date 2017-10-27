@@ -55,6 +55,7 @@ imageMgmtNode() {
         withEnv(["SKOPEO_SRC_CREDENTIALS=${dockerToken()}"]) {
           for (i = 0; i < images.size(); i++) {
             sh "echo skopeoCopy.sh -f ${registry}/${project}/" + images[i] + "-build:tmp -t artifactory.six-group.net/sdbi/" + images[i] + "-build:latest"
+            sh "skopeoCopy.sh -f ${registry}/${project}/" + images[i] + "-build:tmp -t artifactory.six-group.net/sdbi/" + images[i] + "-build:latest"
           }
         }
       }
