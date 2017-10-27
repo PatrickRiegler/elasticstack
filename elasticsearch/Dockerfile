@@ -8,7 +8,7 @@ ENV INSTALL_DIR=/opt/elastic
 ENV PROD=elasticsearch
 ENV PROD_INSTALL=${INSTALL_DIR}/${PROD} PROD_HOME=${HOME_DIR}/${PROD}
 
-RUN mkdir -p ${PROD_HOME} ${PROD_INSTALL}
+RUN mkdir -p ${PROD_HOME} ${INSTALL_DIR}
 RUN chmod -R 755 ${INSTALL_DIR} ${HOME_DIR} \
 	&& fix-permissions.sh ${PROD_HOME} \
 	&& fix-permissions.sh ${PROD_INSTALL}
