@@ -1,0 +1,615 @@
+{
+    "kind": "List",
+    "apiVersion": "v1",
+    "metadata": {},
+    "items": [
+        {
+            "kind": "DeploymentConfig",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "elasticsearch-build-test",
+                "generation": 1,
+                "creationTimestamp": null,
+                "labels": {
+                    "app": "elasticsearch-build-test",
+                    "sdbi": "elasticsearch",
+                    "sdbig": "elasticstack",
+                    "sdbit": "deploy"
+                },
+                "annotations": {
+                    "openshift.io/generated-by": "OpenShiftWebConsole"
+                }
+            },
+            "spec": {
+                "strategy": {
+                    "type": "Rolling",
+                    "rollingParams": {
+                        "updatePeriodSeconds": 1,
+                        "intervalSeconds": 1,
+                        "timeoutSeconds": 600,
+                        "maxUnavailable": "25%",
+                        "maxSurge": "25%"
+                    },
+                    "resources": {}
+                },
+                "triggers": [
+                    {
+                        "type": "ConfigChange"
+                    },
+                    {
+                        "type": "ImageChange",
+                        "imageChangeParams": {
+                            "automatic": true,
+                            "containerNames": [
+                                "elasticsearch-build-test"
+                            ],
+                            "from": {
+                                "kind": "ImageStreamTag",
+                                "namespace": "sdbi-elastic",
+                                "name": "elasticsearch-build:tmp"
+                            }
+                        }
+                    }
+                ],
+                "replicas": 1,
+                "test": false,
+                "selector": {
+                    "app": "elasticsearch-build-test",
+                    "deploymentconfig": "elasticsearch-build-test"
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "elasticsearch-build-test",
+                            "deploymentconfig": "elasticsearch-build-test"
+                        },
+                        "annotations": {
+                            "openshift.io/generated-by": "OpenShiftWebConsole"
+                        }
+                    },
+                    "spec": {
+                        "volumes": [
+                            {
+                                "name": "elasticsearch-build-test-1",
+                                "emptyDir": {}
+                            }
+                        ],
+                        "containers": [
+                            {
+                                "name": "elasticsearch-build-test",
+                                "image": "10.15.84.210:5000/sdbi-elastic/elasticsearch-build@sha256:eacfabc946c97d42f6f8a75adaf1ce49da66e26a5e93abc177cec9c96ab9f269",
+                                "ports": [
+                                    {
+                                        "containerPort": 9200,
+                                        "protocol": "TCP"
+                                    },
+                                    {
+                                        "containerPort": 9300,
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "resources": {},
+                                "volumeMounts": [
+                                    {
+                                        "name": "elasticsearch-build-test-1",
+                                        "mountPath": "/var/elastic/elasticsearch"
+                                    }
+                                ],
+                                "terminationMessagePath": "/dev/termination-log",
+                                "imagePullPolicy": "Always"
+                            }
+                        ],
+                        "restartPolicy": "Always",
+                        "terminationGracePeriodSeconds": 30,
+                        "dnsPolicy": "ClusterFirst",
+                        "securityContext": {}
+                    }
+                }
+            },
+            "status": {}
+        },
+        {
+            "kind": "DeploymentConfig",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "kibana-build-test",
+                "generation": 1,
+                "creationTimestamp": null,
+                "labels": {
+                    "app": "kibana-build-test",
+                    "sdbi": "kibana",
+                    "sdbig": "elasticstack",
+                    "sdbit": "deploy"
+                },
+                "annotations": {
+                    "openshift.io/generated-by": "OpenShiftWebConsole"
+                }
+            },
+            "spec": {
+                "strategy": {
+                    "type": "Rolling",
+                    "rollingParams": {
+                        "updatePeriodSeconds": 1,
+                        "intervalSeconds": 1,
+                        "timeoutSeconds": 600,
+                        "maxUnavailable": "25%",
+                        "maxSurge": "25%"
+                    },
+                    "resources": {}
+                },
+                "triggers": [
+                    {
+                        "type": "ImageChange",
+                        "imageChangeParams": {
+                            "automatic": true,
+                            "containerNames": [
+                                "kibana-build-test"
+                            ],
+                            "from": {
+                                "kind": "ImageStreamTag",
+                                "namespace": "sdbi-elastic",
+                                "name": "kibana-build:tmp"
+                            }
+                        }
+                    },
+                    {
+                        "type": "ConfigChange"
+                    }
+                ],
+                "replicas": 1,
+                "test": false,
+                "selector": {
+                    "app": "kibana-build-test",
+                    "deploymentconfig": "kibana-build-test"
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "kibana-build-test",
+                            "deploymentconfig": "kibana-build-test",
+                            "sdbi": "kibana",
+                            "sdbig": "elasticstack",
+                            "sdbit": "deploy"
+                        },
+                        "annotations": {
+                            "openshift.io/generated-by": "OpenShiftWebConsole"
+                        }
+                    },
+                    "spec": {
+                        "volumes": [
+                            {
+                                "name": "kibana-build-test-1",
+                                "emptyDir": {}
+                            }
+                        ],
+                        "containers": [
+                            {
+                                "name": "kibana-build-test",
+                                "image": "10.15.84.210:5000/sdbi-elastic/kibana-build@sha256:d4fe20406267e5c5c64e356bbfa8debc4cd8d3bbbcc436110e2684bcb0ddc541",
+                                "ports": [
+                                    {
+                                        "containerPort": 5601,
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "env": [
+                                    {
+                                        "name": "ELASTICSEARCH_URL",
+                                        "value": "http://elasticsearch-build-test"
+                                    }
+                                ],
+                                "resources": {},
+                                "volumeMounts": [
+                                    {
+                                        "name": "kibana-build-test-1",
+                                        "mountPath": "/var/elastic/kibana"
+                                    }
+                                ],
+                                "terminationMessagePath": "/dev/termination-log",
+                                "imagePullPolicy": "Always"
+                            }
+                        ],
+                        "restartPolicy": "Always",
+                        "terminationGracePeriodSeconds": 30,
+                        "dnsPolicy": "ClusterFirst",
+                        "securityContext": {}
+                    }
+                }
+            },
+            "status": {}
+        },
+        {
+            "kind": "DeploymentConfig",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "logstash-build-test",
+                "generation": 1,
+                "creationTimestamp": null,
+                "labels": {
+                    "app": "logstash-build-test",
+                    "sdbi": "logstash",
+                    "sdbig": "elasticstack",
+                    "sdbit": "deploy"
+                },
+                "annotations": {
+                    "openshift.io/generated-by": "OpenShiftWebConsole"
+                }
+            },
+            "spec": {
+                "strategy": {
+                    "type": "Rolling",
+                    "rollingParams": {
+                        "updatePeriodSeconds": 1,
+                        "intervalSeconds": 1,
+                        "timeoutSeconds": 600,
+                        "maxUnavailable": "25%",
+                        "maxSurge": "25%"
+                    },
+                    "resources": {}
+                },
+                "triggers": [
+                    {
+                        "type": "ConfigChange"
+                    },
+                    {
+                        "type": "ImageChange",
+                        "imageChangeParams": {
+                            "automatic": true,
+                            "containerNames": [
+                                "logstash-build-test"
+                            ],
+                            "from": {
+                                "kind": "ImageStreamTag",
+                                "namespace": "sdbi-elastic",
+                                "name": "logstash-build:tmp"
+                            }
+                        }
+                    }
+                ],
+                "replicas": 1,
+                "test": false,
+                "selector": {
+                    "app": "logstash-build-test",
+                    "deploymentconfig": "logstash-build-test"
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "logstash-build-test",
+                            "deploymentconfig": "logstash-build-test",
+                            "sdbi": "logstash",
+                            "sdbig": "elasticstack",
+                            "sdbit": "deploy"
+                        },
+                        "annotations": {
+                            "openshift.io/generated-by": "OpenShiftWebConsole"
+                        }
+                    },
+                    "spec": {
+                        "volumes": [
+                            {
+                                "name": "logstash-build-test-1",
+                                "emptyDir": {}
+                            }
+                        ],
+                        "containers": [
+                            {
+                                "name": "logstash-build-test",
+                                "image": "10.15.84.210:5000/sdbi-elastic/logstash-build@sha256:2d0b4646af05a59ee8b84727b49522c033ef7cc90f62be25944c897a7bb88da0",
+                                "env": [
+                                    {
+                                        "name": "AUTOLOGGER",
+                                        "value": "true"
+                                    },
+                                    {
+                                        "name": "SLEEP",
+                                        "value": "10"
+                                    },
+                                    {
+                                        "name": "ELASTICSEARCH_URL",
+                                        "value": "https://elasticsearch-build-test-sdbi-elastic.osedev01.ocp.six-group.net/"
+                                    },
+                                    {
+                                        "name": "LS_INDEXNAME",
+                                        "value": "logstash-build-test"
+                                    }
+                                ],
+                                "resources": {},
+                                "volumeMounts": [
+                                    {
+                                        "name": "logstash-build-test-1",
+                                        "mountPath": "/var/elastic/logstash"
+                                    }
+                                ],
+                                "terminationMessagePath": "/dev/termination-log",
+                                "imagePullPolicy": "Always"
+                            }
+                        ],
+                        "restartPolicy": "Always",
+                        "terminationGracePeriodSeconds": 30,
+                        "dnsPolicy": "ClusterFirst",
+                        "securityContext": {}
+                    }
+                }
+            },
+            "status": {}
+        },
+        {
+            "kind": "DeploymentConfig",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "metricbeat-build-test",
+                "generation": 1,
+                "creationTimestamp": null,
+                "labels": {
+                    "app": "metricbeat-build-test",
+                    "sdbi": "metricbeat",
+                    "sdbig": "elasticstack",
+                    "sdbit": "deploy"
+                },
+                "annotations": {
+                    "openshift.io/generated-by": "OpenShiftWebConsole"
+                }
+            },
+            "spec": {
+                "strategy": {
+                    "type": "Rolling",
+                    "rollingParams": {
+                        "updatePeriodSeconds": 1,
+                        "intervalSeconds": 1,
+                        "timeoutSeconds": 600,
+                        "maxUnavailable": "25%",
+                        "maxSurge": "25%"
+                    },
+                    "resources": {}
+                },
+                "triggers": [
+                    {
+                        "type": "ConfigChange"
+                    },
+                    {
+                        "type": "ImageChange",
+                        "imageChangeParams": {
+                            "automatic": true,
+                            "containerNames": [
+                                "metricbeat-build-test"
+                            ],
+                            "from": {
+                                "kind": "ImageStreamTag",
+                                "namespace": "sdbi-elastic",
+                                "name": "metricbeat-build:tmp"
+                            }
+                        }
+                    }
+                ],
+                "replicas": 1,
+                "test": false,
+                "selector": {
+                    "app": "metricbeat-build-test",
+                    "deploymentconfig": "metricbeat-build-test"
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "metricbeat-build-test",
+                            "deploymentconfig": "metricbeat-build-test",
+                            "sdbi": "metricbeat",
+                            "sdbig": "elasticstack",
+                            "sdbit": "deploy"
+                        },
+                        "annotations": {
+                            "openshift.io/generated-by": "OpenShiftWebConsole"
+                        }
+                    },
+                    "spec": {
+                        "volumes": [
+                            {
+                                "name": "metricbeat-build-test-1",
+                                "emptyDir": {}
+                            }
+                        ],
+                        "containers": [
+                            {
+                                "name": "metricbeat-build-test",
+                                "image": "10.15.84.210:5000/sdbi-elastic/metricbeat-build@sha256:19dd26b8f358148adb9268e48b7dcce7d4a5ee459656ab0738046b05b92da152",
+                                "resources": {},
+                                "volumeMounts": [
+                                    {
+                                        "name": "metricbeat-build-test-1",
+                                        "mountPath": "/var/elastic/metricbeat"
+                                    }
+                                ],
+                                "terminationMessagePath": "/dev/termination-log",
+                                "imagePullPolicy": "Always"
+                            }
+                        ],
+                        "restartPolicy": "Always",
+                        "terminationGracePeriodSeconds": 30,
+                        "dnsPolicy": "ClusterFirst",
+                        "securityContext": {}
+                    }
+                }
+            },
+            "status": {}
+        },
+        {
+            "kind": "Route",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "elasticsearch-build-test",
+                "creationTimestamp": null,
+                "labels": {
+                    "app": "elasticsearch-build-test",
+                    "sdbi": "elasticsearch",
+                    "sdbig": "elasticstack",
+                    "sdbit": "deploy"
+                },
+                "annotations": {
+                    "openshift.io/host.generated": "true"
+                }
+            },
+            "spec": {
+                "host": "elasticsearch-build-test-sdbi-elastic.osedev01.ocp.six-group.net",
+                "to": {
+                    "kind": "Service",
+                    "name": "elasticsearch-build-test",
+                    "weight": 100
+                },
+                "port": {
+                    "targetPort": "9200-tcp"
+                },
+                "tls": {
+                    "termination": "edge",
+                    "insecureEdgeTerminationPolicy": "Allow"
+                },
+                "wildcardPolicy": "None"
+            },
+            "status": {
+                "ingress": [
+                    {
+                        "host": "elasticsearch-build-test-sdbi-elastic.osedev01.ocp.six-group.net",
+                        "routerName": "router",
+                        "conditions": [
+                            {
+                                "type": "Admitted",
+                                "status": "True",
+                                "lastTransitionTime": "2017-11-01T07:53:06Z"
+                            }
+                        ],
+                        "wildcardPolicy": "None"
+                    }
+                ]
+            }
+        },
+        {
+            "kind": "Route",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "kibana-build-test",
+                "creationTimestamp": null,
+                "labels": {
+                    "app": "kibana-build-test",
+                    "sdbi": "kibana",
+                    "sdbig": "elasticstack",
+                    "sdbit": "deploy"
+                },
+                "annotations": {
+                    "openshift.io/host.generated": "true"
+                }
+            },
+            "spec": {
+                "host": "kibana-build-test-sdbi-elastic.osedev01.ocp.six-group.net",
+                "to": {
+                    "kind": "Service",
+                    "name": "kibana-build-test",
+                    "weight": 100
+                },
+                "port": {
+                    "targetPort": "5601-tcp"
+                },
+                "tls": {
+                    "termination": "edge",
+                    "insecureEdgeTerminationPolicy": "Allow"
+                },
+                "wildcardPolicy": "None"
+            },
+            "status": {
+                "ingress": [
+                    {
+                        "host": "kibana-build-test-sdbi-elastic.osedev01.ocp.six-group.net",
+                        "routerName": "router",
+                        "conditions": [
+                            {
+                                "type": "Admitted",
+                                "status": "True",
+                                "lastTransitionTime": "2017-11-01T09:43:14Z"
+                            }
+                        ],
+                        "wildcardPolicy": "None"
+                    }
+                ]
+            }
+        },
+        {
+            "kind": "Service",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "elasticsearch-build-test",
+                "creationTimestamp": null,
+                "labels": {
+                    "app": "elasticsearch-build-test",
+                    "sdbi": "elasticsearch",
+                    "sdbig": "elasticstack",
+                    "sdbit": "deploy"
+                },
+                "annotations": {
+                    "openshift.io/generated-by": "OpenShiftWebConsole",
+                    "service.alpha.openshift.io/dependencies": "[{\"name\":\"kibana-build-test\",\"namespace\":\"\",\"kind\":\"Service\"}]"
+                }
+            },
+            "spec": {
+                "ports": [
+                    {
+                        "name": "9200-tcp",
+                        "protocol": "TCP",
+                        "port": 9200,
+                        "targetPort": 9200
+                    },
+                    {
+                        "name": "9300-tcp",
+                        "protocol": "TCP",
+                        "port": 9300,
+                        "targetPort": 9300
+                    }
+                ],
+                "selector": {
+                    "deploymentconfig": "elasticsearch-build-test"
+                },
+                "type": "ClusterIP",
+                "sessionAffinity": "None"
+            },
+            "status": {
+                "loadBalancer": {}
+            }
+        },
+        {
+            "kind": "Service",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "kibana-build-test",
+                "creationTimestamp": null,
+                "labels": {
+                    "app": "kibana-build-test",
+                    "sdbi": "kibana",
+                    "sdbig": "elasticstack",
+                    "sdbit": "deploy"
+                },
+                "annotations": {
+                    "openshift.io/generated-by": "OpenShiftWebConsole"
+                }
+            },
+            "spec": {
+                "ports": [
+                    {
+                        "name": "5601-tcp",
+                        "protocol": "TCP",
+                        "port": 5601,
+                        "targetPort": 5601
+                    }
+                ],
+                "selector": {
+                    "deploymentconfig": "kibana-build-test"
+                },
+                "type": "ClusterIP",
+                "sessionAffinity": "None"
+            },
+            "status": {
+                "loadBalancer": {}
+            }
+        }
+    ]
+}
