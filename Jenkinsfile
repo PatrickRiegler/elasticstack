@@ -25,7 +25,7 @@ def dockerToken(String login = "serviceaccount") {
 def product =  params.product
 if (product=="") {
 	images = [ "elasticsearch", "kibana", "logstash", "metricbeat", "packetbeat", "topbeat" ];
-} else }
+} else {
 	images = [ product ];
 }
 
