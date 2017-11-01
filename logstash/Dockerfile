@@ -30,8 +30,10 @@ RUN \
   mv $ES_PKG_NAME ${PROD} && \
   fix-permissions.sh ${PROD_INSTALL}
 
+COPY logstash/logstash.conf ${PROD_INSTALL}/config/
 COPY logstash/start.bash ${PROD_INSTALL}/
 RUN fix-permissions.sh ${PROD_INSTALL}/start.bash && \
+	fix-permissions.sh ${PROD_INSTALL}/config/logstash.conf && \
 	chmod +x ${PROD_INSTALL}/start.bash
 
 ENV PATH=${PATH}:${PROD_INSTALL}
