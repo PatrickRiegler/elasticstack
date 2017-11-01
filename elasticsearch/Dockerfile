@@ -30,6 +30,9 @@ RUN \
   mv $ES_PKG_NAME ${PROD} && \
   fix-permissions.sh ${PROD_INSTALL}
 
+# set environment parameter for vm.max_map_count
+RUN sysctl -w vm.max_map_count=262144
+
 COPY elasticsearch/start.bash ${PROD_INSTALL}/
 RUN fix-permissions.sh ${PROD_INSTALL}/start.bash && \
 	chmod +x ${PROD_INSTALL}/start.bash
