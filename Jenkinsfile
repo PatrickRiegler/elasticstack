@@ -23,7 +23,7 @@ def dockerToken(String login = "serviceaccount") {
 } 
 
 // images = [ "elasticsearch", "kibana", "logstash", "metricbeat", "packetbeat", "topbeat" ];
-images = [ "elasticsearch" ];
+images = [ "elasticsearch", "kibana" ];
 
 node() {
     stage("Build images") {
