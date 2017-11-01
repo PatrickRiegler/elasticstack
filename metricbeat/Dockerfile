@@ -21,7 +21,7 @@ RUN echo $ARTIFACTORY_CREDENTIALS
 ENV ES_PKG_NAME ${PROD}-5.6.3-linux-x86_64
 ENV ES_PKG_EXT=tar.gz
 
-# Install logstash
+# Install metricbeat
 RUN \
    curl -f -o ${INSTALL_DIR}/${ES_PKG_NAME}.${ES_PKG_EXT} -u ${ARTIFACTORY_CREDENTIALS} https://artifactory.six-group.net/artifactory/commercial-generic-release-local/elastic/${PROD}/${ES_PKG_NAME}.${ES_PKG_EXT} && \
   cd ${INSTALL_DIR} && \
@@ -30,7 +30,7 @@ RUN \
   mv $ES_PKG_NAME ${PROD} && \
   fix-permissions.sh ${PROD_INSTALL}
 
-COPY logstash/start.bash ${PROD_INSTALL}/
+COPY metricbeat/start.bash ${PROD_INSTALL}/
 RUN fix-permissions.sh ${PROD_INSTALL}/start.bash && \
 	chmod +x ${PROD_INSTALL}/start.bash
 
