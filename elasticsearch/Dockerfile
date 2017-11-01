@@ -31,7 +31,8 @@ RUN \
   fix-permissions.sh ${PROD_INSTALL}
 
 # set environment parameter for vm.max_map_count
-RUN sysctl -w vm.max_map_count=262144
+RUN echo 262144 > /proc/sys/vm/max_map_count && \
+	cat /proc/sys/vm/max_map_count
 
 COPY elasticsearch/start.bash ${PROD_INSTALL}/
 RUN fix-permissions.sh ${PROD_INSTALL}/start.bash && \
