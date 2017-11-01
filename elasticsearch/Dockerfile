@@ -45,6 +45,5 @@ WORKDIR ${PROD_INSTALL}
 # Expose ports.
 EXPOSE 9200 9300
 
-#CMD ${PROD_INSTALL}/bin/elasticsearch
-CMD ["start.bash"]
+CMD ${PROD_INSTALL}/start.bash
 

@@ -1,4 +1,4 @@
-#!/usr/local/bin/dumb-init /bin/bash
+#!/usr/bin/dumb-init /bin/bash
 
 # network host always needs to be patched - also on PROD
 sed -ri "s,network.host:.*,network.host: $(getent ahostsv4 $(hostname) | awk '{ print $1 }' | head -n 1)," ${PROD_INSTALL}/config/elasticsearch.yml
