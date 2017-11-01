@@ -10,7 +10,7 @@
                 "name": "latest",
                 "from": {
                     "kind": "DockerImage",
-                    "name": "artifactory.six-group.net/opc/jenkins:latest"
+                    "name": "artifactory.six-group.net/ocp/jenkins:latest"
                 },
                 "importPolicy": {
                     "scheduled": true
