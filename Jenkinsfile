@@ -2,7 +2,7 @@
 library identifier: 'sdbi-shared-lib@develop', retriever: modernSCM(
         [$class       : 'GitSCMSource',
          remote       : 'ssh://git@stash.six-group.net:22/sdbi/jenkins-shared-library.git',
-         credentialsId: 'six-elastic-bitbucket-secret'])
+         credentialsId: 'sdbi-elastic-bitbucket-secret'])
 
 defaultProperties()
 
