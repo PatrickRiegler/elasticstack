@@ -18,7 +18,7 @@ RUN yum install -y hostname* \
 
 RUN echo $ARTIFACTORY_CREDENTIALS
 
-ENV ES_PKG_NAME ${PROD}-5.6.3
+ENV ES_PKG_NAME ${PROD}-5.6.3-linux-x86_64
 ENV ES_PKG_EXT=tar.gz
 
 # Install kibana
