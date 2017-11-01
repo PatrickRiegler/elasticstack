@@ -22,7 +22,12 @@ def dockerToken(String login = "serviceaccount") {
   }
 } 
 
-images = [ "elasticsearch", "kibana", "logstash", "metricbeat", "packetbeat", "topbeat" ];
+def product =  params.product
+if (product=="") {
+	images = [ "elasticsearch", "kibana", "logstash", "metricbeat", "packetbeat", "topbeat" ];
+} else }
+	images = [ product ];
+}
 
 node() {
     stage("Build images") {
