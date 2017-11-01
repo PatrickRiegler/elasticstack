@@ -1,6 +1,12 @@
-properties([
-  buildDiscarder(logRotator(numToKeepStr: '5'))
-])
+// load sdbi shared libraryssh://git@stash.six-group.net:22/sdbi/jenkins-shared-library.git
+library identifier: 'sdbi-shared-lib@develop', retriever: modernSCM(
+        [$class       : 'GitSCMSource',
+         remote       : 'ssh://git@stash.six-group.net:22/sdbi/jenkins-shared-library.git',
+         credentialsId: 'six-baseimages-bitbucket-secret'])
+
+defaultProperties()
+
+def jobContext = getInitialJobContext()
 
 def dockerToken(String login = "serviceaccount") {
   node() {
@@ -16,21 +22,6 @@ def dockerToken(String login = "serviceaccount") {
   }
 } 
 
-def imageMgmtNode(Closure body) {
-    podTemplate(cloud: 'openshift', inheritFrom: 'maven', label: 'imageMgmt',
-            containers: [containerTemplate(
-                    name: 'jnlp',
-                    image: 'artifactory.six-group.net/sdbi/jenkins-slave-image-mgmt',
-                    alwaysPullImage: true,
-                    args: '${computer.jnlpmac} ${computer.name}',
-                    workingDir: '/tmp')]
-    ) {
-        node('imageMgmt') {
-            body.call()
-        }
-    }
-}
-
 // images = [ "elasticsearch", "kibana", "logstash", "metricbeat", "packetbeat", "topbeat" ];
 images = [ "elasticsearch" ];
 
@@ -43,7 +34,7 @@ node() {
       }
     }
 }
-imageMgmtNode() {
+imageMgmtNode('elasticstack') {
     stage("Promote images") {
       def registry
       def project
