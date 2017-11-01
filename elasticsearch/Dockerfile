@@ -8,10 +8,10 @@ ENV INSTALL_DIR=/opt/elastic
 ENV PROD=elasticsearch
 ENV PROD_INSTALL=${INSTALL_DIR}/${PROD} PROD_HOME=${HOME_DIR}/${PROD}
 
-RUN mkdir -p ${PROD_HOME} ${PROD_INSTALL}
+RUN mkdir -p ${PROD_HOME} ${INSTALL_DIR}
 RUN chmod -R 755 ${INSTALL_DIR} ${HOME_DIR} \
 	&& fix-permissions.sh ${PROD_HOME} \
-	&& fix-permissions.sh ${PROD_INSTALL}
+	&& fix-permissions.sh ${INSTALL_DIR}
 
 RUN yum install -y hostname* iputils \
 	&& yum clean all
@@ -28,9 +28,23 @@ RUN \
   tar xzf ${ES_PKG_NAME}.${ES_PKG_EXT} && \
   rm -f ${ES_PKG_NAME}.${ES_PKG_EXT} && \
   mv $ES_PKG_NAME ${PROD} && \
-  mkdir -p ${PROD_HOME} && \
-  chown -R ${RUN_USER}:${RUN_USER} ${PROD_INSTALL} ${PROD_HOME} && \
-  chmod -R g+w ${PROD_HOME}
+  fix-permissions.sh ${PROD_INSTALL}
+
+COPY ./start.bash ${PROD_INSTALL}/
+RUN fix-permissions.sh ${PROD_INSTALL}/start.bash && \
+	chmod +x ${PROD_INSTALL}/start.bash
 
 ENV PATH=${PATH}:${PROD_INSTALL}
+
+# Define mountable directories.
+VOLUME ${PROD_HOME}
+
+# Define working directory.
+WORKDIR ${PROD_INSTALL}
+
+# Expose ports.
+EXPOSE 9200 9300
+
+#CMD ${PROD_INSTALL}/bin/elasticsearch
+CMD ["start.bash"]
 
