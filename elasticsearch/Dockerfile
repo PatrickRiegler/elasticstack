@@ -49,8 +49,5 @@ WORKDIR ${PROD_INSTALL}
 # Expose ports.
 EXPOSE 9200 9300
 
-RUN yum install -y net-tools telnet \
-        && yum clean all
-
 CMD ${PROD_INSTALL}/start.bash
 
