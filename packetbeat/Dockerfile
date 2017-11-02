@@ -8,9 +8,6 @@ ENV INSTALL_DIR=/opt/elastic
 ENV PROD=packetbeat
 ENV PROD_INSTALL=${INSTALL_DIR}/${PROD} PROD_HOME=${HOME_DIR}/${PROD}
 
-# R E M O V E
-RUN echo "Hi Vitaly again"
-
 RUN mkdir -p ${PROD_HOME} ${INSTALL_DIR}
 RUN chmod -R 755 ${INSTALL_DIR} ${HOME_DIR} \
         && fix-permissions.sh ${PROD_HOME} \
