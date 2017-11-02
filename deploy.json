@@ -222,6 +222,14 @@
                                     {
                                         "name": "ELASTICSEARCH_URL",
                                         "value": "elasticsearch-build-test:9200"
+                                    },
+                                    {
+                                        "name": "SLEEP",
+                                        "value": "5"
+                                    },
+                                    {
+                                        "name": "AUTOLOGGER",
+                                        "value": "true"
                                     }
                                 ],
                                 "resources": {},
