@@ -40,10 +40,10 @@
       "kind": "ImageStream",
       "apiVersion": "v1",
       "metadata": {
-        "name": "topbeat-build",
+        "name": "filebeat-build",
         "labels": {
           "sdbig": "elasticstack",
-          "sdbi": "topbeat"
+          "sdbi": "filebeat"
         }
       }
     },
@@ -236,10 +236,10 @@
       "kind": "BuildConfig",
       "apiVersion": "v1",
       "metadata": {
-        "name": "topbeat-build",
+        "name": "filebeat-build",
         "labels": {
           "sdbig": "elasticstack",
-          "sdbi": "topbeat"
+          "sdbi": "filebeat"
         }
       },
       "spec": {
@@ -261,13 +261,13 @@
               "name": "oracle-java-server-jre-8:latest"
             },
             "forcePull": true,
-            "dockerfilePath": "topbeat/Dockerfile"
+            "dockerfilePath": "filebeat/Dockerfile"
           }
         },
         "output": {
           "to": {
             "kind": "ImageStreamTag",
-            "name": "topbeat-build:tmp"
+            "name": "filebeat-build:tmp"
           }
         }
       }
