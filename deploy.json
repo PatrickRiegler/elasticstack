@@ -322,7 +322,7 @@
                         }
                     }
                 ],
-                "replicas": 1,
+                "replicas": 0,
                 "test": false,
                 "selector": {
                     "app": "logstash-build-test",
@@ -439,7 +439,7 @@
                         }
                     }
                 ],
-                "replicas": 1,
+                "replicas": 0,
                 "test": false,
                 "selector": {
                     "app": "metricbeat-build-test",
