@@ -30,10 +30,8 @@ RUN \
   mv $ES_PKG_NAME ${PROD} && \
   fix-permissions.sh ${PROD_INSTALL}
 
-#COPY filebeat/filebeat.conf ${PROD_INSTALL}/config/
 COPY filebeat/start.bash ${PROD_INSTALL}/
-RUN fix-permissions.sh ${PROD_INSTALL}/start.bash && \
-	# fix-permissions.sh ${PROD_INSTALL}/config/filebeat.conf && \
+RUN fix-permissions.sh ${PROD_INSTALL} && \
 	chmod +x ${PROD_INSTALL}/start.bash
 
 ENV PATH=${PATH}:${PROD_INSTALL}
