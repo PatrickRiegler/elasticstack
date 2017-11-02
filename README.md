@@ -2,10 +2,13 @@
 export USR=...
 export PW=...
 oc delete project sdbi-elastic
-sleep 5
+
+while true; do if ! oc project sdbi-elastic >/dev/null; then break; fi; sleep 1; done
 
 # create project
 oc new-project sdbi-elastic --description="Build and testing for SIX Base Images for the Elastic Stack" --display-name="SIX Docker Base Image - Elastic Stack"
+oc adm policy add-role-to-user admin tkr6q tkb16 tk9mv tkisj tksu3 tkbip tk2he tkkaf tkba4 
+
 sleep 3
 
 # add secrets
@@ -17,18 +20,25 @@ oc label secrets artifactory jenkins-secret=true jenkins-secret-id=artifactory
 
 sleep 3
 
-# create required image streams
-oc create -f https://${USR}:${PW}@stash.six-group.net/projects/SDBI/repos/elasticstack/raw/jenkins.json?at=refs%2Fheads%2Fdevelop
-oc create -f https://${USR}:${PW}@stash.six-group.net/projects/SDBI/repos/elasticstack/raw/oracle-java-server-jre-8.json?at=refs%2Fheads%2Fdevelop
-sleep 3
-
-# create jenkins 
+# create required prerequisites
+oc create -f https://${USR}:${PW}@stash.six-group.net/projects/SDBI/repos/elasticstack/raw/prerequisites.json?at=refs%2Fheads%2Fdevelop
 oc new-app --template=jenkins-ephemeral -p NAMESPACE="sdbi-elastic" -p JENKINS_IMAGE_STREAM_TAG="six-jenkins:latest" -p MEMORY_LIMIT=1024Mi 
-sleep 5
+
+sleep 3
 
 # create build pipelines and s2i builds
 oc create -f https://${USR}:${PW}@stash.six-group.net/projects/SDBI/repos/elasticstack/raw/setup.json?at=refs%2Fheads%2Fdevelop#
 
+sleep 10
+
+# create deployment configs
+oc create -f https://${USR}:${PW}@stash.six-group.net/projects/SDBI/repos/elasticstack/raw/deploy.json?at=refs%2Fheads%2Fdevelop#
+
+# wait on jenkins to be ready
+while true; do if oc describe dc/jenkins | grep Status | grep Complete >/dev/null; then break; fi; sleep 1; done
+
+# run the first build
+oc start-build elasticstack-pipeline
 
 
 
