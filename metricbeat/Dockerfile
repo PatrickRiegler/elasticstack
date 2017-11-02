@@ -32,6 +32,7 @@ RUN \
 
 COPY metricbeat/start.bash ${PROD_INSTALL}/
 RUN fix-permissions.sh ${PROD_INSTALL}/start.bash && \
+	chmod go-w /opt/elastic/metricbeat/metricbeat.yml && \
 	chmod +x ${PROD_INSTALL}/start.bash
 
 ENV PATH=${PATH}:${PROD_INSTALL}
