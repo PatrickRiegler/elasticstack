@@ -1,0 +1,42 @@
+{
+    "kind": "ImageStream",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "six-jenkins"
+    },
+    "spec": {
+        "tags": [
+            {
+                "name": "latest",
+                "from": {
+                    "kind": "DockerImage",
+                    "name": "artifactory.six-group.net/ocp/jenkins:latest"
+                },
+                "importPolicy": {
+                    "scheduled": true
+                }
+            }
+        ]
+    }
+},
+{
+    "kind": "ImageStream",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "oracle-java-server-jre-8"
+    },
+    "spec": {
+        "tags": [
+            {
+                "name": "latest",
+                "from": {
+                    "kind": "DockerImage",
+                    "name": "artifactory.six-group.net/sdbi/oracle-java-server-jre-8:latest"
+                },
+                "importPolicy": {
+                    "scheduled": true
+                }
+            }
+        ]
+    }
+}
