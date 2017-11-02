@@ -34,9 +34,6 @@
                 },
                 "triggers": [
                     {
-                        "type": "ConfigChange"
-                    },
-                    {
                         "type": "ImageChange",
                         "imageChangeParams": {
                             "automatic": true,
@@ -49,9 +46,12 @@
                                 "name": "elasticsearch-build:tmp"
                             }
                         }
+                    },
+                    {
+                        "type": "ConfigChange"
                     }
                 ],
-                "replicas": 1,
+                "replicas": 3,
                 "test": false,
                 "selector": {
                     "app": "elasticsearch-build-test",
@@ -78,7 +78,7 @@
                         "containers": [
                             {
                                 "name": "elasticsearch-build-test",
-                                "image": "10.15.84.210:5000/sdbi-elastic/elasticsearch-build@sha256:eacfabc946c97d42f6f8a75adaf1ce49da66e26a5e93abc177cec9c96ab9f269",
+                                "image": "10.15.84.210:5000/sdbi-elastic/elasticsearch-build@sha256:4cae206dae44d3fb36b1fb9be3727a10e2fb44b6f1d62e1f9aa1d2621b1d89de",
                                 "ports": [
                                     {
                                         "containerPort": 9200,
@@ -89,6 +89,12 @@
                                         "protocol": "TCP"
                                     }
                                 ],
+                                "env": [
+                                    {
+                                        "name": "STARTUP_PARAMS",
+                                        "value": "-Ecluster.name=elasticsearch-build-test"
+                                    }
+                                ],
                                 "resources": {},
                                 "volumeMounts": [
                                     {
@@ -96,6 +102,30 @@
                                         "mountPath": "/var/elastic/elasticsearch"
                                     }
                                 ],
+                                "livenessProbe": {
+                                    "httpGet": {
+                                        "path": "/_cluster/health",
+                                        "port": 9200,
+                                        "scheme": "HTTP"
+                                    },
+                                    "initialDelaySeconds": 90,
+                                    "timeoutSeconds": 5,
+                                    "periodSeconds": 10,
+                                    "successThreshold": 1,
+                                    "failureThreshold": 3
+                                },
+                                "readinessProbe": {
+                                    "httpGet": {
+                                        "path": "/_cluster/health",
+                                        "port": 9200,
+                                        "scheme": "HTTP"
+                                    },
+                                    "initialDelaySeconds": 89,
+                                    "timeoutSeconds": 5,
+                                    "periodSeconds": 10,
+                                    "successThreshold": 1,
+                                    "failureThreshold": 3
+                                },
                                 "terminationMessagePath": "/dev/termination-log",
                                 "imagePullPolicy": "Always"
                             }
@@ -187,7 +217,7 @@
                         "containers": [
                             {
                                 "name": "kibana-build-test",
-                                "image": "10.15.84.210:5000/sdbi-elastic/kibana-build@sha256:d4fe20406267e5c5c64e356bbfa8debc4cd8d3bbbcc436110e2684bcb0ddc541",
+                                "image": "10.15.84.210:5000/sdbi-elastic/kibana-build@sha256:016ae670b701bd82d63dc43ebbe7df0726443848185f2cd86766ccfa30899231",
                                 "ports": [
                                     {
                                         "containerPort": 5601,
@@ -207,6 +237,30 @@
                                         "mountPath": "/var/elastic/kibana"
                                     }
                                 ],
+                                "livenessProbe": {
+                                    "httpGet": {
+                                        "path": "/",
+                                        "port": 5601,
+                                        "scheme": "HTTP"
+                                    },
+                                    "initialDelaySeconds": 30,
+                                    "timeoutSeconds": 5,
+                                    "periodSeconds": 10,
+                                    "successThreshold": 1,
+                                    "failureThreshold": 3
+                                },
+                                "readinessProbe": {
+                                    "httpGet": {
+                                        "path": "/",
+                                        "port": 5601,
+                                        "scheme": "HTTP"
+                                    },
+                                    "initialDelaySeconds": 30,
+                                    "timeoutSeconds": 5,
+                                    "periodSeconds": 10,
+                                    "successThreshold": 1,
+                                    "failureThreshold": 3
+                                },
                                 "terminationMessagePath": "/dev/termination-log",
                                 "imagePullPolicy": "Always"
                             }
@@ -298,7 +352,7 @@
                         "containers": [
                             {
                                 "name": "logstash-build-test",
-                                "image": "10.15.84.210:5000/sdbi-elastic/logstash-build@sha256:2d0b4646af05a59ee8b84727b49522c033ef7cc90f62be25944c897a7bb88da0",
+                                "image": "10.15.84.210:5000/sdbi-elastic/logstash-build@sha256:b5f48aa3e7bc55c5377455431ad4d4f2a46c9ad74021bbf42032ef6a5ebc6361",
                                 "env": [
                                     {
                                         "name": "AUTOLOGGER",
@@ -415,7 +469,7 @@
                         "containers": [
                             {
                                 "name": "metricbeat-build-test",
-                                "image": "10.15.84.210:5000/sdbi-elastic/metricbeat-build@sha256:19dd26b8f358148adb9268e48b7dcce7d4a5ee459656ab0738046b05b92da152",
+                                "image": "10.15.84.210:5000/sdbi-elastic/metricbeat-build@sha256:429ae91ac0061e277535e7872a6e091dfc44c4e81d965f4a5c1f98c7cc791b8d",
                                 "resources": {},
                                 "volumeMounts": [
                                     {
@@ -477,7 +531,7 @@
                             {
                                 "type": "Admitted",
                                 "status": "True",
-                                "lastTransitionTime": "2017-11-01T07:53:06Z"
+                                "lastTransitionTime": "2017-11-01T16:25:43Z"
                             }
                         ],
                         "wildcardPolicy": "None"
@@ -526,7 +580,7 @@
                             {
                                 "type": "Admitted",
                                 "status": "True",
-                                "lastTransitionTime": "2017-11-01T09:43:14Z"
+                                "lastTransitionTime": "2017-11-01T16:25:43Z"
                             }
                         ],
                         "wildcardPolicy": "None"
