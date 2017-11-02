@@ -102,30 +102,6 @@
                                         "mountPath": "/var/elastic/elasticsearch"
                                     }
                                 ],
-                                "livenessProbe": {
-                                    "httpGet": {
-                                        "path": "/_cluster/health",
-                                        "port": 9200,
-                                        "scheme": "HTTP"
-                                    },
-                                    "initialDelaySeconds": 150,
-                                    "timeoutSeconds": 10,
-                                    "periodSeconds": 10,
-                                    "successThreshold": 1,
-                                    "failureThreshold": 3
-                                },
-                                "readinessProbe": {
-                                    "httpGet": {
-                                        "path": "/_cluster/health",
-                                        "port": 9200,
-                                        "scheme": "HTTP"
-                                    },
-                                    "initialDelaySeconds": 120,
-                                    "timeoutSeconds": 10,
-                                    "periodSeconds": 10,
-                                    "successThreshold": 1,
-                                    "failureThreshold": 3
-                                },
                                 "terminationMessagePath": "/dev/termination-log",
                                 "imagePullPolicy": "Always"
                             }
@@ -170,9 +146,6 @@
                 },
                 "triggers": [
                     {
-                        "type": "ConfigChange"
-                    },
-                    {
                         "type": "ImageChange",
                         "imageChangeParams": {
                             "automatic": true,
@@ -185,6 +158,9 @@
                                 "name": "filebeat-build:tmp"
                             }
                         }
+                    },
+                    {
+                        "type": "ConfigChange"
                     }
                 ],
                 "replicas": 0,
@@ -217,19 +193,19 @@
                         "containers": [
                             {
                                 "name": "filebeat-build-test",
-                                "image": "10.15.84.210:5000/sdbi-elastic/filebeat-build@sha256:8a661f21ff79dcd08c4de3803f66d877d605e80ab667f764a6af263303de85f5",
+                                "image": "10.15.84.210:5000/sdbi-elastic/filebeat-build@sha256:eed50cd61e3a60db90bfcbe1f9d62790168a3485049d411c6baf3dcbf3d28d85",
                                 "env": [
                                     {
                                         "name": "ELASTICSEARCH_URL",
                                         "value": "elasticsearch-build-test:9200"
                                     },
                                     {
-                                        "name": "SLEEP",
-                                        "value": "5"
-                                    },
-                                    {
                                         "name": "AUTOLOGGER",
                                         "value": "true"
+                                    },
+                                    {
+                                        "name": "SLEEP",
+                                        "value": "5"
                                     }
                                 ],
                                 "resources": {},
@@ -582,7 +558,7 @@
                         "containers": [
                             {
                                 "name": "metricbeat-build-test",
-                                "image": "10.15.84.210:5000/sdbi-elastic/metricbeat-build@sha256:addc71ab559d77ed179ba19681a4392cd24a98f67841ea4c44aea0edbc3bc706",
+                                "image": "10.15.84.210:5000/sdbi-elastic/metricbeat-build@sha256:ac9767521462c22b93ae74c32f5c735c2bb1d1a289488ee173499cdd87a6cdc6",
                                 "env": [
                                     {
                                         "name": "ELASTICSEARCH_URL",
@@ -596,6 +572,99 @@
                                         "mountPath": "/var/elastic/metricbeat"
                                     }
                                 ],
+                                "terminationMessagePath": "/dev/termination-log",
+                                "imagePullPolicy": "Always"
+                            }
+                        ],
+                        "restartPolicy": "Always",
+                        "terminationGracePeriodSeconds": 30,
+                        "dnsPolicy": "ClusterFirst",
+                        "securityContext": {}
+                    }
+                }
+            },
+            "status": {}
+        },
+        {
+            "kind": "DeploymentConfig",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "packetbeat-build-test",
+                "generation": 1,
+                "creationTimestamp": null,
+                "labels": {
+                    "app": "packetbeat-build-test",
+                    "sdbi": "packetbeat",
+                    "sdbig": "elasticstack",
+                    "sdbit": "deploy"
+                },
+                "annotations": {
+                    "openshift.io/generated-by": "OpenShiftWebConsole"
+                }
+            },
+            "spec": {
+                "strategy": {
+                    "type": "Rolling",
+                    "rollingParams": {
+                        "updatePeriodSeconds": 1,
+                        "intervalSeconds": 1,
+                        "timeoutSeconds": 600,
+                        "maxUnavailable": "25%",
+                        "maxSurge": "25%"
+                    },
+                    "resources": {}
+                },
+                "triggers": [
+                    {
+                        "type": "ConfigChange"
+                    },
+                    {
+                        "type": "ImageChange",
+                        "imageChangeParams": {
+                            "automatic": true,
+                            "containerNames": [
+                                "packetbeat-build-test"
+                            ],
+                            "from": {
+                                "kind": "ImageStreamTag",
+                                "namespace": "sdbi-elastic",
+                                "name": "packetbeat-build:tmp"
+                            }
+                        }
+                    }
+                ],
+                "replicas": 0,
+                "test": false,
+                "selector": {
+                    "app": "packetbeat-build-test",
+                    "deploymentconfig": "packetbeat-build-test"
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "packetbeat-build-test",
+                            "deploymentconfig": "packetbeat-build-test",
+                            "sdbi": "packetbeat",
+                            "sdbig": "elasticstack",
+                            "sdbit": "deploy"
+                        },
+                        "annotations": {
+                            "openshift.io/generated-by": "OpenShiftWebConsole"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "name": "packetbeat-build-test",
+                                "image": "10.15.84.210:5000/sdbi-elastic/packetbeat-build@sha256:e21cbb888bc738548acaa1249fde37e2998e2932b4c868c7a0344509756a5ea6",
+                                "env": [
+                                    {
+                                        "name": "ELASTICSEARCH_URL",
+                                        "value": "elasticsearch-build-test:9200"
+                                    }
+                                ],
+                                "resources": {},
                                 "terminationMessagePath": "/dev/termination-log",
                                 "imagePullPolicy": "Always"
                             }
@@ -650,7 +719,7 @@
                             {
                                 "type": "Admitted",
                                 "status": "True",
-                                "lastTransitionTime": "2017-11-02T11:05:41Z"
+                                "lastTransitionTime": "2017-11-02T11:33:09Z"
                             }
                         ],
                         "wildcardPolicy": "None"
@@ -699,7 +768,7 @@
                             {
                                 "type": "Admitted",
                                 "status": "True",
-                                "lastTransitionTime": "2017-11-02T11:05:41Z"
+                                "lastTransitionTime": "2017-11-02T11:33:09Z"
                             }
                         ],
                         "wildcardPolicy": "None"
