@@ -5,4 +5,4 @@ sed -ri "s,network.host:.*,network.host: $(getent ahostsv4 $(hostname) | awk '{ 
 sed -ri "s,#network.host:.*,network.host: $(getent ahostsv4 $(hostname) | awk '{ print $1 }' | head -n 1)," ${PROD_INSTALL}/config/elasticsearch.yml
 sed -ri "s,#network.host: 192.168.0.1,network.host: $(getent ahostsv4 $(hostname) | awk '{ print $1 }' | head -n 1)," ${PROD_INSTALL}/config/elasticsearch.yml
 
-${PROD_INSTALL}/bin/elasticsearch ${STARTUP_PARAMS}
+${PROD_INSTALL}/bin/elasticsearch ${STARTUP_PARAMS} -Enode.name=$(hostname)
