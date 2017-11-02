@@ -221,7 +221,7 @@
                                 "env": [
                                     {
                                         "name": "ELASTICSEARCH_URL",
-                                        "value": "http://elasticsearch-build-test"
+                                        "value": "elasticsearch-build-test:9200"
                                     }
                                 ],
                                 "resources": {},
