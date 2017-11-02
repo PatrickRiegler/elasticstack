@@ -102,6 +102,30 @@
                                         "mountPath": "/var/elastic/elasticsearch"
                                     }
                                 ],
+                                "livenessProbe": {
+                                    "httpGet": {
+                                        "path": "/_cluster/health",
+                                        "port": 9200,
+                                        "scheme": "HTTP"
+                                    },
+                                    "initialDelaySeconds": 150,
+                                    "timeoutSeconds": 10,
+                                    "periodSeconds": 10,
+                                    "successThreshold": 1,
+                                    "failureThreshold": 3
+                                },
+                                "readinessProbe": {
+                                    "httpGet": {
+                                        "path": "/_cluster/health",
+                                        "port": 9200,
+                                        "scheme": "HTTP"
+                                    },
+                                    "initialDelaySeconds": 120,
+                                    "timeoutSeconds": 10,
+                                    "periodSeconds": 10,
+                                    "successThreshold": 1,
+                                    "failureThreshold": 3
+                                },
                                 "terminationMessagePath": "/dev/termination-log",
                                 "imagePullPolicy": "Always"
                             }
@@ -193,7 +217,7 @@
                         "containers": [
                             {
                                 "name": "filebeat-build-test",
-                                "image": "10.15.84.210:5000/sdbi-elastic/filebeat-build@sha256:eed50cd61e3a60db90bfcbe1f9d62790168a3485049d411c6baf3dcbf3d28d85",
+                                "image": "10.15.84.210:5000/sdbi-elastic/filebeat-build@sha256:ed803c1cbc108858e834b2e1ad06af030db5a108be79e6e35c2f059ed51bd2fd",
                                 "env": [
                                     {
                                         "name": "ELASTICSEARCH_URL",
@@ -558,7 +582,7 @@
                         "containers": [
                             {
                                 "name": "metricbeat-build-test",
-                                "image": "10.15.84.210:5000/sdbi-elastic/metricbeat-build@sha256:ac9767521462c22b93ae74c32f5c735c2bb1d1a289488ee173499cdd87a6cdc6",
+                                "image": "10.15.84.210:5000/sdbi-elastic/metricbeat-build@sha256:9149165ff62c8a9e4b29e8a13ba358bc8abff703160e326cdf54a2299a8912e8",
                                 "env": [
                                     {
                                         "name": "ELASTICSEARCH_URL",
@@ -657,7 +681,7 @@
                         "containers": [
                             {
                                 "name": "packetbeat-build-test",
-                                "image": "10.15.84.210:5000/sdbi-elastic/packetbeat-build@sha256:e21cbb888bc738548acaa1249fde37e2998e2932b4c868c7a0344509756a5ea6",
+                                "image": "10.15.84.210:5000/sdbi-elastic/packetbeat-build@sha256:79ab0106f075cdddc17ed23bcf887698f1e6bb5a049c887cc1f048485e94d8d8",
                                 "env": [
                                     {
                                         "name": "ELASTICSEARCH_URL",
@@ -719,7 +743,7 @@
                             {
                                 "type": "Admitted",
                                 "status": "True",
-                                "lastTransitionTime": "2017-11-02T11:33:09Z"
+                                "lastTransitionTime": "2017-11-02T16:03:13Z"
                             }
                         ],
                         "wildcardPolicy": "None"
@@ -768,7 +792,7 @@
                             {
                                 "type": "Admitted",
                                 "status": "True",
-                                "lastTransitionTime": "2017-11-02T11:33:09Z"
+                                "lastTransitionTime": "2017-11-02T16:03:13Z"
                             }
                         ],
                         "wildcardPolicy": "None"
