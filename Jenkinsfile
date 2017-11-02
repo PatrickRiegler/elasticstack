@@ -31,14 +31,21 @@ def dockerToken(String login = "serviceaccount") {
 */
 
 node() {
-    stage("Build images") {
+  for (i = 0; i < images.size(); i++) {
+    stage("Build image: "+images[i]) {
       withCredentials([usernameColonPassword(credentialsId: 'artifactory', variable: 'ARTIFACTORY_CREDENTIALS')]) {
-        for (i = 0; i < images.size(); i++) {
           openshiftBuild bldCfg: images[i]+'-build', showBuildLogs: 'true', verbose: 'false', waitTime: '5', waitUnit: 'min', env: [[name: 'ARTIFACTORY_CREDENTIALS', value: env.ARTIFACTORY_CREDENTIALS ]]
-        }
       }
     }
+  }
 }
+
+node() {
+  stage("Testing Elastic Stack") {
+    sh "echo 'run tests'"
+  }
+}
+
 imageMgmtNode('elasticstack') {
     stage("Promote images") {
       def registry
