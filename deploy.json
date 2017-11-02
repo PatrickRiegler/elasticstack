@@ -429,7 +429,6 @@
                 ],
                 "replicas": 0,
                 "test": false,
-                "paused": true,
                 "selector": {
                     "app": "logstash-build-test",
                     "deploymentconfig": "logstash-build-test"
