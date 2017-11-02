@@ -31,8 +31,9 @@ RUN \
   fix-permissions.sh ${PROD_INSTALL}
 
 COPY filebeat/start.bash ${PROD_INSTALL}/
-RUN fix-permissions.sh ${PROD_INSTALL} && \
-	chmod +x ${PROD_INSTALL}/start.bash
+RUN chmod +x ${PROD_INSTALL}/start.bash && \
+	chmod +w ${PROD_INSTALL}/filebeat.yml && \
+	fix-permissions.sh ${PROD_INSTALL}
 
 ENV PATH=${PATH}:${PROD_INSTALL}
 
