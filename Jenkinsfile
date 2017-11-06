@@ -31,6 +31,15 @@ def dockerToken(String login = "serviceaccount") {
 }
 */
 
+
+node() {
+    stage("Setup") { 
+        // get git revision
+        checkout scm
+        jobContext.gitRevision = getGitRevision()
+    }
+}
+
 node() {
   for (i = 0; i < images.size(); i++) {
     stage("Build image: "+images[i]) {
@@ -55,13 +64,16 @@ imageMgmtNode('elasticstack') {
       //project = sh returnStdout: true, script: "oc get is elasticsearch-build --template='{{ .status.dockerImageRepository }}' | cut -d/ -f2"
       registry = sh(returnStdout: true, script: "oc get is elasticsearch-build --template='{{ .status.dockerImageRepository }}' | cut -d/ -f1").trim()
       project = sh(returnStdout: true, script: "oc get is elasticsearch-build --template='{{ .status.dockerImageRepository }}' | cut -d/ -f2").trim()
+      timeStamp = Context.currentBuildVersion
       withCredentials([usernameColonPassword(credentialsId: 'artifactory', variable: 'SKOPEO_DEST_CREDENTIALS')]) {
         withEnv(["SKOPEO_SRC_CREDENTIALS=${dockerToken()}", "ARTIFACTORY_BASIC_AUTH=${env.SKOPEO_DEST_CREDENTIALS}"]) {
           for (i = 0; i < images.size(); i++) {
+            tag = "d" + images[i] + "_${timeStamp}_develop." + Context.gitRevision
             sh "skopeoCopy.sh -f ${registry}/${project}/" + images[i] + "-build:tmp -t artifactory.six-group.net/sdbi/" + images[i] + "-snapshot:latest"
-            sh "skopeoCopy.sh -f ${registry}/${project}/" + images[i] + "-build:tmp -t artifactory.six-group.net/sdbi/" + images[i] + jobContext.currentBuildVersion         
-            sh "promoteToArtifactory.sh -i sdbi/" + image[i] + " -t latest -r sdbi-docker-release-local -c"
-            sh "promoteToArtifactory.sh -i sdbi/" + image[i] + " -t " + jobContext.currentBuildVersion + " -r sdbi-docker-release-local -c"
+            sh "skopeoCopy.sh -f ${registry}/${project}/" + images[i] + "-build:tmp -t artifactory.six-group.net/sdbi/" + images[i] + "-snapshot:${tag}"         
+           // no need to promote to release at this point
+           // sh "promoteToArtifactory.sh -i sdbi/" + image[i] + " -t latest -r sdbi-docker-release-local -c"
+           // sh "promoteToArtifactory.sh -i sdbi/" + image[i] + " -t ${timeStamp} -r sdbi-docker-release-local -c"
           }      
         }
       }
