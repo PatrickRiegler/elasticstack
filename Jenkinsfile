@@ -56,10 +56,13 @@ imageMgmtNode('elasticstack') {
       registry = sh(returnStdout: true, script: "oc get is elasticsearch-build --template='{{ .status.dockerImageRepository }}' | cut -d/ -f1").trim()
       project = sh(returnStdout: true, script: "oc get is elasticsearch-build --template='{{ .status.dockerImageRepository }}' | cut -d/ -f2").trim()
       withCredentials([usernameColonPassword(credentialsId: 'artifactory', variable: 'SKOPEO_DEST_CREDENTIALS')]) {
-        withEnv(["SKOPEO_SRC_CREDENTIALS=${dockerToken()}"]) {
+        withEnv(["SKOPEO_SRC_CREDENTIALS=${dockerToken()}", "ARTIFACTORY_BASIC_AUTH=${env.SKOPEO_DEST_CREDENTIALS}"]) {
           for (i = 0; i < images.size(); i++) {
             sh "skopeoCopy.sh -f ${registry}/${project}/" + images[i] + "-build:tmp -t artifactory.six-group.net/sdbi/" + images[i] + "-snapshot:latest"
-          }
+            sh "skopeoCopy.sh -f ${registry}/${project}/" + images[i] + "-build:tmp -t artifactory.six-group.net/sdbi/" + images[i] + jobContext.currentBuildVersion         
+            sh "promoteToArtifactory.sh -i sdbi/" + image[i] + " -t latest -r sdbi-docker-release-local -c"
+            sh "promoteToArtifactory.sh -i sdbi/" + image[i] + " -t " + jobContext.currentBuildVersion + " -r sdbi-docker-release-local -c"
+          }      
         }
       }
     }
