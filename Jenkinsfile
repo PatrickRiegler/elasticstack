@@ -60,6 +60,7 @@ imageMgmtNode('elasticstack') {
     stage("Promote images") {
       def registry
       def project
+      echo "Job Context: ${jobContext}"
       //registry = sh returnStdout: true, script: "oc get is elasticsearch-build --template='{{ .status.dockerImageRepository }}' | cut -d/ -f1"
       //project = sh returnStdout: true, script: "oc get is elasticsearch-build --template='{{ .status.dockerImageRepository }}' | cut -d/ -f2"
       registry = sh(returnStdout: true, script: "oc get is elasticsearch-build --template='{{ .status.dockerImageRepository }}' | cut -d/ -f1").trim()
