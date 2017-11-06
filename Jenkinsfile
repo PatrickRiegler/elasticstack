@@ -23,8 +23,8 @@ def dockerToken(String login = "serviceaccount") {
 } 
 
 //if (params.product) {
-	 //images = [ "elasticsearch", "kibana", "logstash", "metricbeat", "packetbeat", "filebeat" ];
-	 images = [ "metricbeat", "packetbeat" ];
+	 images = [ "elasticsearch", "kibana", "logstash", "metricbeat", "packetbeat", "filebeat" ];
+	 //images = [ "metricbeat", "packetbeat" ];
 /*
 } else {
 	images = [ params.product ];
@@ -36,6 +36,7 @@ node() {
     stage("Setup") { 
         // get git revision
         checkout scm
+        // we do not use this now - was replaced with currentBuildVersion from Jenkins itself 
         jobContext.gitRevision = getGitRevision()
     }
 }
