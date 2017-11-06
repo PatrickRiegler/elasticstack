@@ -23,8 +23,8 @@ def dockerToken(String login = "serviceaccount") {
 } 
 
 //if (params.product) {
-	//images = [ "elasticsearch", "kibana", "logstash", "metricbeat", "packetbeat", "filebeat" ];
-	 images = [ "metricbeat", "packetbeat" ];
+	 images = [ "elasticsearch", "kibana", "logstash", "metricbeat", "packetbeat", "filebeat" ];
+	 //images = [ "metricbeat", "packetbeat" ];
 /*
 } else {
 	images = [ params.product ];
