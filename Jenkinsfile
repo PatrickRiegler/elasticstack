@@ -66,7 +66,7 @@ imageMgmtNode('elasticstack') {
       registry = sh(returnStdout: true, script: "oc get is elasticsearch-build --template='{{ .status.dockerImageRepository }}' | cut -d/ -f1").trim()
       project = sh(returnStdout: true, script: "oc get is elasticsearch-build --template='{{ .status.dockerImageRepository }}' | cut -d/ -f2").trim()
       timeStamp = jobContext.currentBuildVersion
-      timeStamp = ${timeStamp}.getAt(0..(${timeStamp}.length()-7))
+      timeStamp = timeStamp.getAt(0..(timeStamp.length()-7))
       withCredentials([usernameColonPassword(credentialsId: 'artifactory', variable: 'SKOPEO_DEST_CREDENTIALS')]) {
         withEnv(["SKOPEO_SRC_CREDENTIALS=${dockerToken()}", "ARTIFACTORY_BASIC_AUTH=${env.SKOPEO_DEST_CREDENTIALS}"]) {
           for (i = 0; i < images.size(); i++) {
