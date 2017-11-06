@@ -23,8 +23,8 @@ def dockerToken(String login = "serviceaccount") {
 } 
 
 //if (params.product) {
-	 images = [ "elasticsearch", "kibana", "logstash", "metricbeat", "packetbeat", "filebeat" ];
-	 //images = [ "metricbeat", "packetbeat" ];
+	 //images = [ "elasticsearch", "kibana", "logstash", "metricbeat", "packetbeat", "filebeat" ];
+	 images = [ "metricbeat", "packetbeat" ];
 /*
 } else {
 	images = [ params.product ];
@@ -70,7 +70,7 @@ imageMgmtNode('elasticstack') {
       withCredentials([usernameColonPassword(credentialsId: 'artifactory', variable: 'SKOPEO_DEST_CREDENTIALS')]) {
         withEnv(["SKOPEO_SRC_CREDENTIALS=${dockerToken()}", "ARTIFACTORY_BASIC_AUTH=${env.SKOPEO_DEST_CREDENTIALS}"]) {
           for (i = 0; i < images.size(); i++) {
-            tag = "d" + images[i] + "_${timeStamp}_develop." + jobContext.gitRevision
+            tag = "d" + images[i] + "_${timeStamp}_develop." + currentBuild.number
             sh "skopeoCopy.sh -f ${registry}/${project}/" + images[i] + "-build:tmp -t artifactory.six-group.net/sdbi/" + images[i] + "-snapshot:latest"
             sh "skopeoCopy.sh -f ${registry}/${project}/" + images[i] + "-build:tmp -t artifactory.six-group.net/sdbi/" + images[i] + "-snapshot:${tag}"         
            // no need to promote to release at this point
