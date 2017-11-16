@@ -16,6 +16,14 @@ RUN mkdir -p ${PROD_HOME} ${INSTALL_DIR} \
 	&& fix-permissions.sh ${PROD_HOME} \
 	&& fix-permissions.sh ${INSTALL_DIR}
 
+# Define mountable directories.
+VOLUME ${PROD_HOME}
+
+# Define working directory.
+WORKDIR ${PROD_INSTALL}
+
+CMD ${PROD_INSTALL}/start.bash
+
 RUN yum install -y --setopt=tsflags=nodocs hostname* \
 	&& yum clean all
 
@@ -32,13 +40,4 @@ COPY metricbeat/start.bash ${PROD_INSTALL}/
 RUN fix-permissions.sh ${PROD_INSTALL}/start.bash && \
 	chmod go-w /opt/elastic/metricbeat/metricbeat.yml && \
 	chmod +x ${PROD_INSTALL}/start.bash
-
-# Define mountable directories.
-VOLUME ${PROD_HOME}
-
-# Define working directory.
-WORKDIR ${PROD_INSTALL}
-
-CMD ${PROD_INSTALL}/start.bash
-
 
