@@ -2,8 +2,14 @@ FROM artifactory.six-group.net/sdbi/six-rhel7:latest
 
 MAINTAINER HAKA6-Pacemakers <HAKA6-Pacemakers@six-group.com>
 
-ENV HOME_DIR=/var/elastic INSTALL_DIR=/opt/elastic PROD=metricbeat
-ENV PROD_INSTALL=${INSTALL_DIR}/${PROD} PROD_HOME=${HOME_DIR}/${PROD}
+ENV HOME_DIR=/var/elastic \
+    INSTALL_DIR=/opt/elastic \
+    PROD=metricbeat
+ENV ES_PKG_NAME=${PROD}-5.6.3-linux-x86_64 \
+    ES_PKG_EXT=tar.gz \
+    PROD_INSTALL=${INSTALL_DIR}/${PROD} \
+    PROD_HOME=${HOME_DIR}/${PROD}
+ENV PATH=${PATH}:${PROD_INSTALL}
 
 RUN mkdir -p ${PROD_HOME} ${INSTALL_DIR} \
 	&& chmod -R 755 ${INSTALL_DIR} ${HOME_DIR} \
@@ -12,8 +18,6 @@ RUN mkdir -p ${PROD_HOME} ${INSTALL_DIR} \
 
 RUN yum install -y --setopt=tsflags=nodocs hostname* \
 	&& yum clean all
-
-ENV ES_PKG_NAME=${PROD}-5.6.3-linux-x86_64 ES_PKG_EXT=tar.gz
 
 # Install metricbeat
 RUN \
@@ -28,8 +32,6 @@ COPY metricbeat/start.bash ${PROD_INSTALL}/
 RUN fix-permissions.sh ${PROD_INSTALL}/start.bash && \
 	chmod go-w /opt/elastic/metricbeat/metricbeat.yml && \
 	chmod +x ${PROD_INSTALL}/start.bash
-
-ENV PATH=${PATH}:${PROD_INSTALL}
 
 # Define mountable directories.
 VOLUME ${PROD_HOME}
