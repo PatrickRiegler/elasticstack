@@ -23,13 +23,23 @@ def dockerToken(String login = "serviceaccount") {
 } 
 
 //if (params.product) {
-	images = [ "elasticsearch", "kibana", "logstash", "metricbeat", "packetbeat", "filebeat" ];
-	// images = [ "metricbeat", "packetbeat" ];
+	 images = [ "elasticsearch", "kibana", "logstash", "metricbeat", "packetbeat", "filebeat" ];
+	 //images = [ "metricbeat", "packetbeat" ];
 /*
 } else {
 	images = [ params.product ];
 }
 */
+
+
+node() {
+    stage("Setup") { 
+        // get git revision
+        checkout scm
+        // we do not use this now - was replaced with currentBuildVersion from Jenkins itself 
+        jobContext.gitRevision = getGitRevision()
+    }
+}
 
 node() {
   for (i = 0; i < images.size(); i++) {
@@ -51,15 +61,23 @@ imageMgmtNode('elasticstack') {
     stage("Promote images") {
       def registry
       def project
+      echo "Job Context: ${jobContext}"
       //registry = sh returnStdout: true, script: "oc get is elasticsearch-build --template='{{ .status.dockerImageRepository }}' | cut -d/ -f1"
       //project = sh returnStdout: true, script: "oc get is elasticsearch-build --template='{{ .status.dockerImageRepository }}' | cut -d/ -f2"
       registry = sh(returnStdout: true, script: "oc get is elasticsearch-build --template='{{ .status.dockerImageRepository }}' | cut -d/ -f1").trim()
       project = sh(returnStdout: true, script: "oc get is elasticsearch-build --template='{{ .status.dockerImageRepository }}' | cut -d/ -f2").trim()
+      timeStamp = jobContext.currentBuildVersion
+      timeStamp = timeStamp.getAt(0..(timeStamp.length()-7))
       withCredentials([usernameColonPassword(credentialsId: 'artifactory', variable: 'SKOPEO_DEST_CREDENTIALS')]) {
-        withEnv(["SKOPEO_SRC_CREDENTIALS=${dockerToken()}"]) {
+        withEnv(["SKOPEO_SRC_CREDENTIALS=${dockerToken()}", "ARTIFACTORY_BASIC_AUTH=${env.SKOPEO_DEST_CREDENTIALS}"]) {
           for (i = 0; i < images.size(); i++) {
+            tag = "d" + images[i] + "_${timeStamp}_develop." + currentBuild.number
             sh "skopeoCopy.sh -f ${registry}/${project}/" + images[i] + "-build:tmp -t artifactory.six-group.net/sdbi/" + images[i] + "-snapshot:latest"
-          }
+            sh "skopeoCopy.sh -f ${registry}/${project}/" + images[i] + "-build:tmp -t artifactory.six-group.net/sdbi/" + images[i] + "-snapshot:${tag}"         
+           // no need to promote to release at this point
+           // sh "promoteToArtifactory.sh -i sdbi/" + image[i] + " -t latest -r sdbi-docker-release-local -c"
+           // sh "promoteToArtifactory.sh -i sdbi/" + image[i] + " -t ${timeStamp} -r sdbi-docker-release-local -c"
+          }      
         }
       }
     }
