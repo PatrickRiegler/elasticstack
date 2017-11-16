@@ -1,4 +1,4 @@
-#!/usr/bin/dumb-init /bin/bash
+#/bin/bash
 
 if [ -z "${CONF}" ]; then
 	export CONF="packetbeat.yml"
