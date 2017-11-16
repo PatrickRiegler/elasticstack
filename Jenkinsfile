@@ -71,7 +71,7 @@ imageMgmtNode('elasticstack') {
       timeStamp = jobContext.currentBuildVersion
       timeStamp = timeStamp.getAt(0..(timeStamp.length()-7))
       withCredentials([usernameColonPassword(credentialsId: 'artifactory', variable: 'SKOPEO_DEST_CREDENTIALS')]) {
-        withEnv(["SKOPEO_SRC_CREDENTIALS=${dockerToken()}", "ARTIFACTORY_BASIC_AUTH=${env.SKOPEO_DEST_CREDENTIALS}"]) {
+        withEnv(["SKOPEO_SRC_CREDENTIALS=getDockerToken()", "ARTIFACTORY_BASIC_AUTH=${env.SKOPEO_DEST_CREDENTIALS}"]) {
           for (i = 0; i < images.size(); i++) {
             tag = "d" + images[i] + "_${timeStamp}_develop." + currentBuild.number
             sh "skopeoCopy.sh -f ${registry}/${project}/" + images[i] + "-build:tmp -t artifactory.six-group.net/sdbi/" + images[i] + "-snapshot:latest"
