@@ -38,7 +38,7 @@ RUN \
   cd ${INSTALL_DIR} && \
   tar xzf ${ES_PKG_NAME}.${ES_PKG_EXT} && \
   rm -f ${ES_PKG_NAME}.${ES_PKG_EXT} && \
-  mv $ES_PKG_NAME ${PROD} && \
+  mv $ES_PKG_NAME/* ${PROD_INSTALL}/ && \
   fix-permissions.sh ${PROD_INSTALL}
 
 # set environment parameter for vm.max_map_count
