@@ -10,7 +10,7 @@ RUN mkdir -p ${PROD_HOME} ${INSTALL_DIR} \
 	&& fix-permissions.sh ${PROD_HOME} \
 	&& fix-permissions.sh ${INSTALL_DIR}
 
-RUN yum install -y hostname* iputils \
+RUN yum install -y --setopt=tsflags=nodocs hostname* \
 	&& yum clean all
 
 RUN echo $ARTIFACTORY_CREDENTIALS

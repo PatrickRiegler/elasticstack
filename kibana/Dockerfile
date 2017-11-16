@@ -10,7 +10,7 @@ RUN mkdir -p ${PROD_HOME} ${INSTALL_DIR} \
 	&& fix-permissions.sh ${PROD_HOME} \
 	&& fix-permissions.sh ${INSTALL_DIR}
 
-RUN yum install -y hostname* \
+RUN yum install -y --setopt=tsflags=nodocs hostname* \
 	&& yum clean all
 
 ENV ES_PKG_NAME=${PROD}-5.6.3-linux-x86_64 ES_PKG_EXT=tar.gz
