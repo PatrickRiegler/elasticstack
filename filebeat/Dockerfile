@@ -36,7 +36,8 @@ RUN \
   cd ${INSTALL_DIR} && \
   tar xzf ${ES_PKG_NAME}.${ES_PKG_EXT} && \
   rm -f ${ES_PKG_NAME}.${ES_PKG_EXT} && \
-  mv $ES_PKG_NAME ${PROD} && \
+  mv $ES_PKG_NAME/* ${PROD} && \
+  rm -R $ES_PKG_NAME && \
   fix-permissions.sh ${PROD_INSTALL}
 
 COPY filebeat/start.bash ${PROD_INSTALL}/

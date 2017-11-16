@@ -30,8 +30,6 @@ CMD ${PROD_INSTALL}/start.bash
 RUN yum install -y --setopt=tsflags=nodocs hostname* \
 	&& yum clean all
 
-RUN echo $ARTIFACTORY_CREDENTIALS
-
 # Install Elasticsearch.
 RUN \
    curl -f -o ${INSTALL_DIR}/${ES_PKG_NAME}.${ES_PKG_EXT} -u ${ARTIFACTORY_CREDENTIALS} https://artifactory.six-group.net/artifactory/commercial-generic-release-local/elastic/${PROD}/${ES_PKG_NAME}.${ES_PKG_EXT} && \
@@ -39,6 +37,7 @@ RUN \
   tar xzf ${ES_PKG_NAME}.${ES_PKG_EXT} && \
   rm -f ${ES_PKG_NAME}.${ES_PKG_EXT} && \
   mv $ES_PKG_NAME/* ${PROD_INSTALL}/ && \
+  rm -R $ES_PKG_NAME && \
   fix-permissions.sh ${PROD_INSTALL}
 
 # set environment parameter for vm.max_map_count
