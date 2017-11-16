@@ -44,3 +44,4 @@ COPY kibana/start.bash ${PROD_INSTALL}/
 RUN fix-permissions.sh ${PROD_INSTALL}/start.bash && \
 	chmod +x ${PROD_INSTALL}/start.bash
 
+USER 1001

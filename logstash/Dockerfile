@@ -46,3 +46,4 @@ RUN fix-permissions.sh ${PROD_INSTALL}/start.bash && \
 	fix-permissions.sh ${PROD_INSTALL}/config/logstash.conf && \
 	chmod +x ${PROD_INSTALL}/start.bash
 
+USER 1001
