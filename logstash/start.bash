@@ -4,6 +4,10 @@ if [ -z "${CONF}" ]; then
 	export CONF="config/logstash.conf"
 fi
 
+if [ -z "${STARTUP_PARAMS}" ]; then 
+	STARTUP_PARAMS="-f ${PROD_INSTALL}/${CONF}"
+fi
+
 sed -i "s,PROD_INSTALL,${PROD_INSTALL},g" ${PROD_INSTALL}/${CONF}
 if [ ! -z "${ELASTICSEARCH_URL}" ]; then
 	sed -i "s,ELASTICSEARCH_URL,${ELASTICSEARCH_URL}," ${PROD_INSTALL}/${CONF}
@@ -24,5 +28,5 @@ if [ "$AUTOLOGGER" = "true" ]; then
 (while true; do  echo "$(date +"%Y%m%d%H%M%S")|4|REQUEST|10.16.5.206|tkr6q|GET|/get/$(date +"%Y%m%d")/$(echo $((RANDOM%20+10)))|HTTP/1.1|200|0" >> ${PROD_INSTALL}/request.log; sleep ${SLEEP}; done) &
 fi
 
-${PROD_INSTALL}/bin/logstash -f ${PROD_INSTALL}/${CONF}
+${PROD_INSTALL}/bin/logstash ${STARTUP_PARAMS}
 
